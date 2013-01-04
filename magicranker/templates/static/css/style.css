@@ -119,6 +119,10 @@ h2.subtitle#limit span {
     margin-top: 10px;
 }
 
+select {
+    width: 50px;
+}
+
 .article {
     margin-bottom: 50px;
 }
@@ -131,8 +135,8 @@ h2.subtitle#limit span {
 
 .panel {
     background: #e5ecf9;
-    padding: 6px;
-    height: 200px;
+    padding: 6px 6px 6px 7px;
+    height: 170px;
     margin-top: 10px;
     margin-left: 5px;
     margin-right: 5px;
