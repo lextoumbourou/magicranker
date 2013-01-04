@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="span-24">
+    <h2 class="subtitle" id="about_the_site"><span></span>About The Site</h2> 
+    <p>
+        Magic Ranker is an ASX (Australian Stock Exchange) implementation of the Magic Formula ranking system from Joel Greenblatt's book, <a href='http://www.amazon.com/Little-Book-That-Beats-Market/dp/0471733067'>The Little Book That Beats The Market</a>. The book is <strong>mandatory</strong> reading before using this tool.<br /><br /> 
+
+        The data is provided by <a href='http://au.finance.yahoo.com/'>Yahoo Finance</a> and should only be used for personal use. I can't vouch for the integrity of the data.<br /><br /> 
+	 
+        Magic Ranker is a not-for-profit site. I don't make any money off it, nor do I intend to. If bandwidth costs pick up, I may request donations to keep the site running. The site is here because I really liked the ideas in Joel's book but couldn't find an online tool like <a href='http://www.magicformula.com'>MagicFormula.com</a> for the ASX.<br /><br /> 
+	 
+        The site was written in Python using the <a href='https://www.djangoproject.com/'>Django</a> framework.
+    </p> 
+    <h2 class="subtitle" id="how_it_works"><span></span>How It Works</h2> 
+    <p> 
+        Data is scraped from the Yahoo Finance on a daily basis and a ranking script runs that:
+        <ol> 
+            <li> Sorts the Return on Equity values collected from highest to lowest and assigns an rank from 1 onward</li> 
+            <li> Sorts the P/E fields from lowest to highest and assigns a rank from 1 onwards.</li> 
+            <li> Adds the ROE and PE rank together to get a total rank and then orders by the total rank.</li> 
+        </ol> 
+        In addition, my application differs from the Magic Formula in that it also offers the ability to average the ROE by either 5 years or 10 years, ( if companies data doesn't go back that far, they're eliminated) and the ROE in step 1 is replaced with an average ROE. I thought this was a nifty feature to have but it's not in the book, so feel free to ignore it.
+    </p> 
+    <h2 class="subtitle" id="disclaimer"><span></span>Disclaimer</h2> 
+    <p> 
+        I can't promise the data on here is correct. So please don't base your entire investment strategy off this website. It's your future. Consult a Finance Professional for assistance, but please make sure it's one who knows what they're doing.<br /><br /> 
+        As with anything worth doing, make sure you as much research as possible. Read good books written by people who are successful and make sure they were successful before they became authors.<br /><br /> 
+        If this research sounds like a right pain in the clacker - if even reading Joel's book <a href='http://www.amazon.com/Little-Book-That-Beats-Market/dp/0471733067'>The Little Book That Beats The Market</a> sounds like a drag, then forget about picking stocks and put your money in an <a href="http://www.vanguard.com.au/">Index Fund</a>. <strong>Life is short, spend it doing what you love!</strong> 
+    </p> 
+    <h2 class="subtitle" id="about_me"><span></span>About Me</h2> 
+    <p> 
+        My name is Lex Toumbourou. I'm a Linux system administrator / developer working in the IPTV space in Melbourne, Australia. I'm interested in value investing, development, open-source, maximising human potential and smashing pints in deadbeat bars.<br /><br /> 
+        If you want to get in contact, go <a href="/interface/contact">here</a><br /><br /> 
+    </p> 
+</div> 
+{% endblock %}

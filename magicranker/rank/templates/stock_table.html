@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load percentage %}
+
+{% block content %}
+<div class="span-24"> 
+{% if rank_results %}
+   <table class="table table-striped">
+        {% for stock in rank_results %}
+            {% if forloop.first %}
+          <thead><tr>
+             <th>Rank</th>
+             {% if stock.code %}  <th>Code</th>{% endif %}
+             {% if stock.code.name %}<th>Name</th>{% endif %}
+             {% if stock.roe %}<th>ROE</th>{% endif %}
+             {% if stock.pe %}<th>PE</th>{% endif %}
+             {% if stock.market_cap %}<th>Market Cap</th>{% endif %}
+             {% if stock.debt_perc %}<th>Debt</th>{% endif %}
+      </tr></thead>
+      <tbody>
+      {% endif %}
+      <tr>
+             <td>{{ forloop.counter }}</td>
+             {% if stock.code %}  <td><a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.code }}</a></td>{% endif %}
+             {% if stock.code.name %}<td><a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.code.name }}</a></td>{% endif %}
+             {% if stock.roe %}<td>{{ stock.roe|percentage }}</td>{% endif %}
+             {% if stock.pe %}<td>{{ stock.pe }}</td>{% endif %}
+             {% if stock.market_cap %}<td>{{ stock.market_cap|intword }}</td>{% endif %}
+             {% if stock.debt_perc %}<td>{{ stock.debt_perc }}%</td>{% endif %}
+      </tr>
+{% endfor %}
+      </tbody>
+    </table>
+</div>
+{% endif %}
+{% endblock %}
