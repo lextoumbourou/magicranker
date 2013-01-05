@@ -54,9 +54,12 @@
                     <h2 class="subtitle" id="rank"><span></span>Rank?</h2> 
                     <div class="span-4"> 
                         <div class="panel"> 
-                            <h3 id="roe_title">ROE?</h3>	
+                            <h3 id="roe_title">Return on Equity?</h3>	
                             <p>
-                                <input id="roe_check" type="checkbox" name="rank_roe" value="Yes" /><br /> 
+                                <input id="roe_check" type="checkbox" name="rank_roe" value="Yes" /> 
+                                <input id="roe_hidden" type="checkbox" name="roe_hidden" value="Yes" {% if roe_hidden %}checked{% endif %}/>Hide? 
+                            </p>
+                            <p>
                                 <div id="roe_group"> 
                                 
                                 Max:
@@ -69,7 +72,7 @@
                                 </select> %<br>
                                 Avg:  
                                 <select name="rank_roe_avg">
-                                        <option value=0>0</option>
+                                        <option value=1>1</option>
                                         <option value=2>2</option>
                                         <option value=3>3</option>
                                         <option value=5>5</option>
@@ -77,25 +80,28 @@
                                 </select> years<br>
                             </div>
                             </p> 
-                            <div class="hidden"><input id="roe_hidden" type="checkbox" name="roe_hidden" value="Yes" {% if roe_hidden %}checked{% endif %}/>Hidden?</div> 
+                            
                         </div> 
                     </div> 
                     <div class="span-4 last"> 
                         <div class="panel"> 
-                            <h3 id="pe_title">PE?</h3>	
+                            <h3 id="pe_title">Price over Earnings?</h3>	
                             <p>	
-                                <input id="rank_pe" type="checkbox" name="rank_pe" value="Yes" /><br /> 
+                                <input id="rank_pe" type="checkbox" name="rank_pe" value="Yes" />
+
+                                <input id="pe_hidden" type="checkbox" name="pe_hidden" value="Yes" {% if pe_hidden %}checked{% endif %}/>Hide? 
+                            </p>
+                            <p>
                                 <div class="radio_group" id="pe_check_group"> 
                                     Min: 
                                     <select name="rank_pe_min">
-                                        <option value="0">0</option>
+                                        <option value="1">1</option>
                                         <option value="2">2</option>
                                         <option value="3">3</option>
                                         <option value="5">5</option>
                                         <option value="10">10</option>
                                     </select> %<br>
                                 </div> 
-                            </p> <div class="hidden"><input id="pe_hidden" type="checkbox" name="pe_hidden" value="Yes" {% if pe_hidden %}checked{% endif %}/>Hidden?</div> 
                         </div> 
                     </div> 
                 </div>		
@@ -103,44 +109,47 @@
                     <h2 class="subtitle" id="filter"><span></span>Filter?</h2>	
                         <div class="span-4"> 
                             <div class="panel"> 
-                                <h3 id="mcap_title">M Cap?</h3> 
-                                <input id="filt_market_cap" type="checkbox" name="filt_market_cap" value="Yes" /><br /> 
-                                    <p> 
-                                        <div id="market_cap_group"> 
-                                            Min: 
-                                            <select name="filt_market_cap_min">
-                                                <option value="0">0</option>
-                                                <option value="25000000">250</option>M
-                                                <option value="50000000">500</option>
-                                                <option value="1000000000">1000</option>
-                                            </select> M
-                                        </div>	
-                                    </p> 
-                                    <div class="hidden"><input id="market_cap_hidden" type="checkbox" name="market_cap_hidden" value="Yes" {% if market_cap_hidden %}checked{% endif %}/>Hidden?</div> 
-                                </div>				
+                                <h3 id="mcap_title">Market Capitalisation?</h3> 
+                                <p>
+                                    <input id="filt_market_cap" type="checkbox" name="filt_market_cap" value="Yes" /> 
+                                    <input id="market_cap_hidden" type="checkbox" name="debt_hidden" value="Yes" {% if debt_hidden %}checked{% endif %}/>Hide? 
+                                </p>
+                                <p> 
+                                    <div id="market_cap_group"> 
+                                        Min: 
+                                        <select name="filt_market_cap_min">
+                                            <option value="0">0</option>
+                                            <option value="25000000">250</option>M
+                                            <option value="50000000">500</option>
+                                            <option value="1000000000">1000</option>
+                                        </select> M
+                                    </div>	
+                                </p> 
+                            </div>				
+                        </div> 
+                        <div class="span-4 last"> 
+                            <div class="panel"> 
+                                <h3 id="debt_title">Debt?</h3> <br><br><br>
+                                <p> 
+                                    <input id="debt_check" type="checkbox" name="debt_check" value="Yes" /> 
+                                    <input id="debt_hidden" type="checkbox" name="debt_hidden" value="Yes" {% if debt_hidden %}checked{% endif %}/>Hide? 
+                                </p>
+                                <p>
+                                   <div id="debt_group"> 
+                                        Max: 
+                                       <select>
+                                           <option value="">Any</option> 
+                                           <option value="75">75</option> 
+                                           <option value="50">50</option> 
+                                           <option value="25">25</option> 
+                                           <option value="10">25</option> 
+                                       </select> %
+                                    </div>	
+                                </p> 
                             </div> 
-                            <div class="span-4 last"> 
-                                <div class="panel"> 
-                                    <h3 id="debt_title">Debt?</h3> 
-                                    <p> 
-                                        <input id="debt_check" type="checkbox" name="debt_check" value="Yes" /><br /> 
-                                           <div id="debt_group"> 
-                                            Max: 
-                                               <select>
-                                                   <option value="">Any</option> 
-                                                   <option value="75">75</option> 
-                                                   <option value="50">50</option> 
-                                                   <option value="25">25</option> 
-                                                   <option value="10">25</option> 
-                                               </select> %
-                                        </div>	
-                                    </p> 
-                                    <div class="hidden">
-                                        <input id="debt_hidden" type="checkbox" name="debt_hidden" value="Yes" {% if debt_hidden %}checked{% endif %}/>Hidden?</div> 
-                                    </div> 
-                                </div> 
-                            </div> 
-                            <div class="span-8 last"> 
+                        </div> 
+                    </div>
+                    <div class="span-8 last"> 
                                 <h2 class="subtitle" id="limit"><span></span>Limit?</h2> 
                                 <div class="span-4"> 
                                     <div class="panel"> 
