@@ -8,7 +8,7 @@ from lib.ranker import RankMethod, FilterMethod, Ranker
 
 
 def main(request):
-    return render_to_response('base.html', {})
+    return render_to_response('rank.html', {})
 
 
 def rank(request):
