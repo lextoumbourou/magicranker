@@ -1,0 +1,198 @@
+<form action="/rank" accept-charset="utf-8" method="GET" class="email" id="myform">	
+    <div class="row-fluid">
+        <div class="span4">
+
+            <div class="row-fluid">
+                <div class="span12"> 
+                    <h2 class="subtitle">Rank?</h2> 
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6"> 
+                    <div class="panel"> 
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="title">Return on Equity?</div>	
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <div class="span6">
+                                <button type="button" 
+                                        class="btn btn-small" 
+                                        id="roe_check" 
+                                        data-toggle="button">Yes</button>
+                            </div>
+                            <div class="span6">
+                                <label class="checkbox">
+                                    <input id="roe_hidden" type="checkbox" name="roe_hidden" value="Yes" {% if roe_hidden %}checked{% endif %}/>
+                                    Hide? 
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="row-fluid extra-controls">
+                            <div class="span12">
+                                <label for="rank_row_max">Max</label>
+                                <select name="rank_roe_max">
+                                    <option value=""></option>
+                                    <option value="1.0">100</option>
+                                    <option value="0.70">70</option>
+                                    <option value="0.50">50</option>
+                                    <option value="0.30">30</option>
+                                </select> %<br>
+                                <label for="rank_row_avg">Avg</label>
+                                <select name="rank_roe_avg">
+                                    <option value=1>1</option>
+                                    <option value=2>2</option>
+                                    <option value=3>3</option>
+                                    <option value=5>5</option>
+                                    <option value=10>10</option>
+                                </select> years<br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="span6">
+                    <div class="panel"> 
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="title">Price to Earnings?</div>	
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span6">	
+                                <button class="btn btn-small" id="rank_pe" type="button" data-toggle="button">Yes</button>
+                            </div>
+                            <div class="span6">
+                                <label class="checkbox">
+                                    <input id="pe_hidden" type="checkbox" name="pe_hidden" value="Yes" {% if pe_hidden %}checked{% endif %}/>
+                                            Hide? 
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row-fluid extra-controls">
+                            <div class="span12">
+                                <label for="rank_pe_min">Min</label>
+                                <select name="rank_pe_min">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                </select> %<br>
+                            </div> 
+                        </div>
+                    </div> 
+                </div> 
+            </div>
+        </div>
+        <div class="span4">
+            <div class="row-fluid">
+                <div class="span12"> 
+                    <h2 class="subtitle" id="filter">Filter?</h2>	
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="span6"> 
+                    <div class="panel"> 
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="title">Market Capitalisation?</div> 
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span6">
+                                <button class="btn btn-small" 
+                                        id="filt_market_cap" 
+                                        data-toggle="button" 
+                                        type="button">Yes</button>
+                            </div>
+                            <div class="span6">
+                                <label class="checkbox">
+                                    <input id="market_cap_hidden" type="checkbox" name="debt_hidden" value="Yes" {% if debt_hidden %}checked{% endif %}/>Hide? 
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row-fluid extra-controls"> 
+                            <div class="span12">
+                                <label for="filt_market_cap_min">Min</label>
+                                    <select name="filt_market_cap_min">
+                                        <option value="0">0</option>
+                                        <option value="25000000">250</option>M
+                                        <option value="50000000">500</option>
+                                        <option value="1000000000">1000</option>
+                                    </select> M
+                                </div>	
+                            </div>				
+                        </div>
+                    </div>
+                        <div class="span6"> 
+                            <div class="panel"> 
+                                <div class="row-fluid">
+                                    <div class="span12">
+                                        <div class="title">Debt?</div>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span6">
+                                    <button class="btn btn-small" id="debt_check" data-toggle="button" type="button">Yes</button>
+                                </div>
+                                <div class="span6">
+                                    <label class="checkbox">
+                                        <input id="debt_hidden" type="checkbox" name="debt_hidden" value="Yes" {% if debt_hidden %}checked{% endif %}/>Hide? 
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="row-fluid extra-controls">
+                                <div class="span12">
+                                    <label for="">Max</label>
+                                   <select name="filt_debt_max">
+                                       <option value="">Any</option> 
+                                       <option value="75">75</option> 
+                                       <option value="50">50</option> 
+                                       <option value="25">25</option> 
+                                       <option value="10">25</option> 
+                                   </select> %
+                                </div>	
+                            </div> 
+                        </div> 
+                    </div> 
+                </div>
+            </div>
+            <div class="span4">
+                <div class="row-fluid">
+                    <div class="span12"> 
+                        <h2 class="subtitle" id="limit"><span></span>Limit?</h2> 
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span6"> 
+                        <div class="panel"> 
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div class="title">Number? </div> 
+                                </div>
+                            </div>
+                            <div class="row-fluid"> 
+                                <div class="span12">
+                                    <div class="btn-group" data-toggle="buttons-radio">
+                                        <button type="button" class="btn btn-small" type="radio" name="limit" value="50" checked /><label for="limit_50">50</label> 
+                                        <button type="button" class="btn btn-small" type="radio" name="limit" value="30" checked /><label for="limit_50">30</label> 
+                                        <button type="button" class="btn btn-small" type="radio" name="limit" value="10" checked /><label for="limit_50">10</label> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                    </div> 
+                </div> 
+            </div>
+        </div>
+                    <div class="row-fluid"> 
+                        <button id="main_submit" name="main_submit" type="submit" class="btn">Submit</button> 
+                    </div> 
+                </div>
+
+  
