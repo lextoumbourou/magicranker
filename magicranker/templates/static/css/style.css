@@ -100,7 +100,7 @@ h2.subtitle span {
 }
 
 select {
-    width: 50px;
+    width: 80px;
 }
 
 .article {
@@ -116,9 +116,8 @@ select {
 .panel {
     background: #e5ecf9;
     padding: 6px 6px 6px 7px;
-    height: 170px;
+    height: 240px;
     margin-top: 10px;
-    margin-left: 5px;
     margin-right: 5px;
     position: relative;
     border-radius: 5px;
@@ -130,6 +129,7 @@ select {
     font-size: 1.2em;
     line-height: 1;
     margin-bottom: 1em;
+    min-height: 34px;
 }
 
 .panel .hidden {
@@ -201,4 +201,8 @@ select {
 
 .comment p {
     padding:10px 30px;
+}
+
+.extra-controls {
+    margin-top: 15px;
 }
