@@ -9,8 +9,8 @@ class Detail(models.Model):
     code = models.CharField(max_length=5, unique=True)
     name = models.CharField(max_length=100, null=True, blank=True)
     desc = models.TextField(null=True, blank=True)
+    first_updated = models.DateField(null=True)
     last_updated = models.DateField(null=True)
-    is_listed = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['code']
