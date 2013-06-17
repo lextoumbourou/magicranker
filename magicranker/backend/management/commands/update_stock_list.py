@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from datetime import datetime, timedelta
 import logging
 
@@ -22,28 +23,32 @@ class Command(BaseCommand):
         today = datetime.today()
 
         new_count = 0;
-        updated_count = 0;
+        update_count = 0;
 
         # Add stock_list to the db if they aren't there already
         if stocks:
             for stock in stocks:
-                stock, created = Detail.objects.get_or_create(
-                    code=stock, name='', desc='',
-                    last_listed=today)
+                print stock
+                stock, created = Detail.objects.get_or_create(code=stock)
                 if created:
                     new_count += 1;
                     stock.first_listed = today
                 else:
                     update_count += 1;
-                    stock.last_listed = today
 
+                stock.last_listed = today
                 stock.save()
+
                 self.stdout.write('Adding or updating {0}\n'.format(stock))
-            return True
         else:
             logging.error('Failed to download stock list')
-            return False
+
+        message = '{0} new companies'.format(new_count)
+        message += '{0} updated companies'.format(update_count)
+
+        send_mail(
+            'Stock list complete', message, 'lextoumbourou@gmail.com',
+            ['lextoumbourou@gmail.com'], fail_silently = False)
 
     def handle(self, *args, **kwargs):
-        if self._get_full_stock_list():
-            self._set_unlisted_companies()
+        self._get_full_stock_list()
