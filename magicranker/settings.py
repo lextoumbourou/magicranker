@@ -1,6 +1,6 @@
 import os.path
 
-import private
+import _private as private
 
 # Display debug info if this is a dev server
 if os.uname()[1] in private.DEV_SERVERS:
@@ -164,9 +164,6 @@ LOGGING = {
 
 EMAIL_HOST = private.EMAIL_HOST
 EMAIL_PORT = private.EMAIL_PORT 
-EMAIL_HOST_USER = private.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = private.EMAIL_HOST_PASSWORD
-EMAIL_USE_TLS = private.EMAIL_USE_TLS
 DEFAULT_FROM_EMAIL = private.DEFAULT_FROM_EMAIL 
 
 INTERNAL_IPS = ('127.0.0.1',)
