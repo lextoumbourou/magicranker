@@ -43,7 +43,9 @@ class Command(BaseCommand):
         else:
             logging.error('Failed to download stock list')
 
-        message = '{0} new companies'.format(new_count)
+        message = 'Stock list report ran successfully at {0}\n'.format(
+                datetime.now())
+        message = '{0} new companies\n'.format(new_count)
         message += '{0} updated companies'.format(update_count)
 
         send_mail(
