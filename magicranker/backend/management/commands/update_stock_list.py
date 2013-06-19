@@ -39,19 +39,10 @@ class Command(BaseCommand):
                 stock.last_listed = today
                 stock.save()
         else:
+            return False
             logging.error('Failed to download stock list')
 
-        message = 'Stock list report ran at {0}\n'.format(
-                datetime.now())
-        message = '{0} new companies\n'.format(new_count)
-        message += '{0} updated companies'.format(update_count)
-
-        title = 'Report: stock list complete' 
-        logging.info(message)
-
-        send_mail(
-            title, message, 'reports@magicranker.com',
-            ['lextoumbourou@gmail.com'], fail_silently = False)
+        return new_count, update_count
 
     def _set_unlisted_companies(self):
         """
@@ -66,14 +57,24 @@ class Command(BaseCommand):
                 unlisted_count += 1
                 stock.save()
 
-        title = 'Report: unlisted companies complete'
-        message = 'Unlisted company report ran at {0}\n'.format(
-                datetime.now())
-        message += '{0} unlisted companies'.format(unlisted_count)
-
-        send_mail(
-             title, message, 'reports@magicranker.com',
-            ['lextoumbourou@gmail.com'], fail_silently = False)
+        return unlisted_count
 
     def handle(self, *args, **kwargs):
-        self._get_full_stock_list()
+        title = 'Report: stock list complete ({0})'.format(
+                datetime.now())
+
+        results = self._get_full_stock_list()
+
+        if results:
+            new_count, update_count = results
+            unlisted_count = self._set_unlisted_companies()
+
+            message = '{0} new companies\n'.format(new_count)
+            message += '{0} updated companies'.format(update_count)
+            message += '{0} unlisted companies'.format(unlisted_count)
+        else:
+            message = 'Failed to run\n'
+
+        send_mail(
+            title, message, 'reports@magicranker.com',
+            ['lextoumbourou@gmail.com'], fail_silently = False)
