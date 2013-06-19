@@ -46,10 +46,33 @@ class Command(BaseCommand):
         message = '{0} new companies\n'.format(new_count)
         message += '{0} updated companies'.format(update_count)
 
+        title = 'Report: stock list complete' 
         logging.info(message)
 
         send_mail(
-            'Stock list complete', message, 'reports@magicranker.com',
+            title, message, 'reports@magicranker.com',
+            ['lextoumbourou@gmail.com'], fail_silently = False)
+
+    def _set_unlisted_companies(self):
+        """
+        Set companies that haven't been updated in 2 weeks to unlisted
+        """
+        two_weeks_ago = (datetime.today() - timedelta(weeks=2)).date()
+        stocks = Detail.objects.filter(is_listed=True)
+        unlisted_count = 0
+        for stock in stocks:
+            if stock.last_listed <= two_weeks_ago:
+                stock.is_listed = False
+                unlisted_count += 1
+                stock.save()
+
+        title = 'Report: unlisted companies complete'
+        message = 'Unlisted company report ran at {0}\n'.format(
+                datetime.now())
+        message += '{0} unlisted companies'.format(unlisted_count)
+
+        send_mail(
+             title, message, 'reports@magicranker.com',
             ['lextoumbourou@gmail.com'], fail_silently = False)
 
     def handle(self, *args, **kwargs):
