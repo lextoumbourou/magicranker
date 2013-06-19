@@ -2,8 +2,10 @@ import os.path
 
 import _private as private
 
+is_dev = os.uname()[1] in private.DEV_SERVERS
+
 # Display debug info if this is a dev server
-if os.uname()[1] in private.DEV_SERVERS:
+if is_dev:
     DEBUG = True
 else:
     DEBUG = False
