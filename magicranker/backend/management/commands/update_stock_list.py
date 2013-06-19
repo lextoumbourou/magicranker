@@ -70,7 +70,7 @@ class Command(BaseCommand):
             unlisted_count = self._set_unlisted_companies()
 
             message = '{0} new companies\n'.format(new_count)
-            message += '{0} updated companies'.format(update_count)
+            message += '{0} updated companies\n'.format(update_count)
             message += '{0} unlisted companies'.format(unlisted_count)
         else:
             message = 'Failed to run\n'
