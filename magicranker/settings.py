@@ -20,12 +20,17 @@ DATABASES = {
     'default': {
         'ENGINE': private.DB_ENGINE,
         'NAME': private.DB_NAME,
-        'USER': private.DB_USER,
-        'PASSWORD': private.DB_PASS,
-        'HOST': private.DB_HOST,
-        'PORT': private.DB_PORT,
     }
 }
+
+if is_dev:
+    DATABASES['default']['HOST'] = private.DEV_DB_HOST
+    DATABASES['default']['USER'] = private.DEV_DB_USER
+    DATABASES['default']['PASSWORD'] = private.DEV_DB_PASS
+else:
+    DATABASES['default']['HOST'] = private.PROD_DB_HOST
+    DATABASES['default']['USER'] = private.PROD_DB_USER
+    DATABASES['default']['PASSWORD'] = private.PROD_DB_PASS
 
 TIME_ZONE = private.TIME_ZONE 
 
