@@ -38,15 +38,15 @@ class Command(BaseCommand):
 
                 stock.last_listed = today
                 stock.save()
-
-                self.stdout.write('Adding or updating {0}\n'.format(stock))
         else:
             logging.error('Failed to download stock list')
 
-        message = 'Stock list report ran successfully at {0}\n'.format(
+        message = 'Stock list report ran at {0}\n'.format(
                 datetime.now())
         message = '{0} new companies\n'.format(new_count)
         message += '{0} updated companies'.format(update_count)
+
+        logging.info(message)
 
         send_mail(
             'Stock list complete', message, 'reports@magicranker.com',
