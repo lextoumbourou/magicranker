@@ -49,7 +49,7 @@ class Command(BaseCommand):
         message += '{0} updated companies'.format(update_count)
 
         send_mail(
-            'Stock list complete', message, 'lextoumbourou@gmail.com',
+            'Stock list complete', message, 'reports@magicranker.com',
             ['lextoumbourou@gmail.com'], fail_silently = False)
 
     def handle(self, *args, **kwargs):
