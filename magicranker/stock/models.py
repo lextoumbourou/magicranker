@@ -11,6 +11,7 @@ class Detail(models.Model):
     desc = models.TextField(null=True, blank=True)
     first_listed = models.DateField(null=True)
     last_listed = models.DateField(null=True)
+    is_listed = models.BooleanField()
 
     class Meta:
         ordering = ['code']
