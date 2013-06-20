@@ -15,6 +15,8 @@ class Command(BaseCommand):
         price_data = yf.get_current_price()
         if price_data:
             code, date, price, volume = price_data
+            self.stdout.write('Attempting to update {0} with {1}, {2}, {3}\n'.format(
+                stock.code, str(date), price, volume))
             try:
                 price_history = (
                     PriceHistory.objects.get(code=stock, date=date))
@@ -28,8 +30,7 @@ class Command(BaseCommand):
                 price_history = PriceHistory(
                     code=stock, date=date, close=price, volume=volume)
             price_history.save()
-            self.stdout.write('Updating {0} with {1}, {2}, {3}\n'.format(
-                stock.code, str(date), price, volume))
+            
             return True
         else:
             return False
@@ -39,6 +40,9 @@ class Command(BaseCommand):
         stats_data = yf.get_key_stats()
         if stats_data:
             code, eps, roe, bv, pe, mc = stats_data
+            self.stdout.write('Attempting to update {0} with {1}, {2}, {3}, {4}, {5}\n'.format(
+                code, eps, roe, bv, pe, mc))
+
             try:
                 per_share = (
                     PerShare.objects.get(code=stock, date=date))
