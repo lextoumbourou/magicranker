@@ -36,6 +36,7 @@ class Command(BaseCommand):
                 else:
                     update_count += 1;
 
+                stock.is_listed = True
                 stock.last_listed = today
                 stock.save()
         else:
