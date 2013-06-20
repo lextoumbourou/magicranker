@@ -1,4 +1,5 @@
 from datetime import datetime
+from django.core.mail import send_mail
 
 from django.core.management.base import BaseCommand, CommandError
 
@@ -60,8 +61,17 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         stocks = Detail.objects.filter(is_listed=True)
+        scrape_count = 0
         for stock in stocks:
             yf = YahooFinance.YahooFinance(stock.code)
             date = datetime.today().date()
             if self._update_latest_price(stock, date, yf):
                 self._update_key_stats(stock, date, yf)
+                scrape_count += 1
+
+        title = 'Report: key stats complete ({0})'.format(
+                datetime.now())
+        message = '{0} companies updated'.format(scrape_count)
+        send_mail(
+            title, message, 'reports@magicranker.com',
+            ['lextoumbourou@gmail.com'], fail_silently = False)
