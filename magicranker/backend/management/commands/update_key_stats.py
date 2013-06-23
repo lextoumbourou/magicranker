@@ -67,6 +67,8 @@ class Command(BaseCommand):
         stocks = Detail.objects.filter(is_listed=True)
         scrape_count = 0
         for stock in stocks:
+            self.stdout.write(
+                'Collecting data for {0}'.format(stock))
             yf = YahooFinance.YahooFinance(stock.code)
             date = datetime.today().date()
             if self._update_latest_price(stock, date, yf):

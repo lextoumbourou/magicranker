@@ -95,7 +95,17 @@ class YahooFinance():
         except ValueError:
             return False
 
-        return (self.stock, self.date, float(price), int(volume))
+        try:
+            price = float(price)
+        except ValueError:
+            price = 0
+
+        try:
+            volume = int(volume)
+        except ValueError:
+            volume = 0
+
+        return (self.stock, self.date, price, volume)
 
     def get_profile(self):
         """
