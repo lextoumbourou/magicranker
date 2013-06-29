@@ -5,30 +5,30 @@ import urllib2
 import re
 import ssl
 import StringIO
-import time
 
 from BeautifulSoup import BeautifulSoup
 
 import pycurl
-import scraper
+
 import private
-import time
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:2.0.1)'
 USER_AGENT += 'Gecko/20100101 Firefox/4.0.1'
 
 
 class ETrade():
-    headers = {'User-Agent': USER_AGENT,
-               'Content-Type': 'application/x-www-form-urlencoded'}
-    cookie_path = 'cookies'
+    def __init__(self):
+        self.user_agent = USER_AGENT
+        self.headers = {'User-Agent': USER_AGENT,
+                        'Content-Type': 'application/x-www-form-urlencoded'}
+        self.cookie_path = '/tmp/cookies'
 
     def login(self, username, password):
         post_data = {'Login1$CookiesEnabled': '',
                      'Login1$HiddenDate': '',
                      'Login1$ddlStartIn': '/Login.aspx',
-                     'Login1$txtPassword': private.password,
-                     'Login1$txtUserName': private.username,
+                     'Login1$txtPassword': password,
+                     'Login1$txtUserName': username,
                      'TitleBar1$ctl02$GlobalQuote': '',
                      '__EVENTARGUMENT': 'Click',
                      '__EVENTTARGET': 'Login1$btnLogin',
@@ -40,7 +40,7 @@ class ETrade():
         b = StringIO.StringIO()
         curl = pycurl.Curl()
         curl.setopt(pycurl.URL, 'https://invest.etrade.com.au/Login.aspx')
-        curl.setopt(pycurl.USERAGENT, self.user_agent)
+        curl.setopt(pycurl.USERAGENT, self.user_agent),
         curl.setopt(pycurl.POST, 1)
         curl.setopt(pycurl.POSTFIELDS, post_data)
         curl.setopt(pycurl.FOLLOWLOCATION, 1)
@@ -62,7 +62,7 @@ class ETrade():
         b = StringIO.StringIO()
         c = pycurl.Curl()
         c.setopt(pycurl.URL, str(url))
-        c.setopt(pycurl.USERAGENT, self.user_agent)
+        c.setopt(pycurl.USERAGENT, self.user_agent),
         c.setopt(pycurl.FOLLOWLOCATION, 1)
         c.setopt(pycurl.SSL_VERIFYPEER, False)
         c.setopt(pycurl.SSL_VERIFYHOST, 0)
@@ -125,7 +125,7 @@ class ETrade():
         if page:
             page = self._clean_html(page)
             soup = BeautifulSoup(page)
-            # Get last table (should have ROE in it)
+            # Last table should have ROE in it
             try:
                 trs = soup.findAll('table', rules='all')[-1].findAll('tr')
             except:
@@ -133,9 +133,9 @@ class ETrade():
                 return False
 
             data['periods'] = self._get_dates(trs)
-            data['roe'] = self._get_values(trs, 'Return on capital (%)')
+            data['roe'] = self._get_values(trs, 'Return on equity (%)')
 
-            # Get 2nd last table (should have Per Share stats in it)
+            # Get 3rd last table (should have Per Share stats in it)
             try:
                 trs = soup.findAll('table', rules='all')[-2].findAll('tr')
             except:
@@ -146,5 +146,6 @@ class ETrade():
                 trs, 'Shares Outstanding (m)')
             data['book_value'] = self._get_values(trs, 'Book Value ($)')
             data['earnings'] = self._get_values(trs, 'Earnings (cents)')
+            data['pe'] = self._get_values(trs, 'Avg P/E Ratio')
 
         return data
