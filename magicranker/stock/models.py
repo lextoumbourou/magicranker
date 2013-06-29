@@ -39,6 +39,7 @@ class PerShare(models.Model):
     pe = models.DecimalField(
         null=True, blank=True, max_digits=10, decimal_places=2)
     market_cap = models.BigIntegerField(null=True, blank=True)
+    shares_outstanding = models.BigIntegerField(null=True, blank=True)
 
     def __unicode__(self):
         return self.code.code
