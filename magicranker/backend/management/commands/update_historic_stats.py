@@ -6,8 +6,7 @@ from django.core.mail import send_mail
 
 from magicranker.backend.scrapers.ETrade import ETrade
 from magicranker.stock.models import Detail, PerShare
-
-import private
+import magicranker._private as private
 
 class Command(BaseCommand):
     def add_to_db(self, stock, data):
