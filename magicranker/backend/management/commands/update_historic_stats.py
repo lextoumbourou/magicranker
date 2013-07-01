@@ -58,6 +58,7 @@ class Command(BaseCommand):
         etrade.login(
             username=private.ETRADE_USERNAME, password=private.ETRADE_PASSWORD)
         scrape_count = 0
+        error_count = 0
         for stock in stocks:
             time.sleep(1)
             print stock.code
@@ -66,11 +67,14 @@ class Command(BaseCommand):
             if data:
                 try:
                     self.add_to_db(stock, data)
+                    scrape_count += 1
                 except Exception as e:
                     print "Can't add to database: " + str(e)
+                    error_count += 1
         title = 'Report: update historical stats ({0})'.format(
                 datetime.now())
-        message = '{0} companies updated'.format(scrape_count)
+        message = '{0} companies updated\n'.format(scrape_count)
+        message += '{0} companies failed to update\n'.format(error_count)
         send_mail(
             title, message, 'reports@magicranker.com',
             ['lextoumbourou@gmail.com'], fail_silently = False)
