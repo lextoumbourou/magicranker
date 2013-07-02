@@ -1,4 +1,5 @@
 import re
+import time
 import logging
 from datetime import datetime
 
@@ -264,7 +265,7 @@ class YahooFinance():
         """
         output = {}
         url = 'http://finance.yahoo.com/q/'
-        url = 'bs?s={0}.AX+Balance+Sheet&annual'.format(stock.code)
+        url += 'bs?s={0}.AX+Balance+Sheet&annual'.format(self.stock.code)
         soup = BeautifulSoup(utils.get_page(url))
         try:
             dates_html = soup.findAll('td', "yfnc_modtitle1")
@@ -289,8 +290,8 @@ class YahooFinance():
         trs = (soup.find('table', 'yfnc_tabledata1')
                    .find('table')
                    .findAll('tr'))
-        output += self._get_all_assets(trs)
-        output += self._get_all_liabilities(trs)
+        output.update(self._get_all_assets(trs))
+        output.update(self._get_all_liabilities(trs))
         return output 
 
 if __name__ == '__main__':
