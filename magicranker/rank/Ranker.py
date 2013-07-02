@@ -42,10 +42,10 @@ class Ranker():
         # to date in between the year, used for performing
         # a rank in the past
         results = (PerShare.objects
-                           .filter(date__lte=date)
-                           .filter(date__gte=last_year)
-                           .order_by('code', '-date')
-                           .distinct('code__code'))
+           .filter(date__lte=date)
+           .filter(date__gte=last_year)
+           .order_by('code', '-date')
+           .distinct('code__code'))
 
         for method in self.filter_methods + self.rank_methods:
             print method.name
