@@ -42,7 +42,7 @@ class PerShare(models.Model):
     shares_outstanding = models.BigIntegerField(null=True, blank=True)
 
     def __unicode__(self):
-        return self.code.code
+        return '{0} - {1}'.format(self.code.code, self.date)
 
 
 class BalSheet(models.Model):
