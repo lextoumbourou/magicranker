@@ -1,0 +1,47 @@
+########
+# ANZ 
+########
+-   fields: {code: 'ANZ', desc: null, first_listed: 2013-06-19, is_listed: true, last_listed: 2013-06-20,
+        name: null}
+    model: stock.detail
+    pk: 215
+-   fields: {book_value: '30.27', code: 215, date: 2013-06-20, earnings: '23.20', market_cap: 6400000,
+        pe: '8.50', roe: '0.09', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 2000
+
+########
+# CBA
+########
+-   fields: {code: 'CBA', desc: null, first_listed: 2013-06-19, is_listed: true, last_listed: 2013-06-20,
+        name: null}
+    model: stock.detail
+    pk: 315
+-   fields: {book_value: '31.27', code: 315, date: 2013-06-20, earnings: '23.20', market_cap: 8500000,
+        pe: '9.40', roe: '0.40', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 3000
+
+########
+# ARB
+########
+-   fields: {code: 'ARB', desc: null, first_listed: 2013-06-19, is_listed: true, last_listed: 2013-06-20,
+        name: null}
+    model: stock.detail
+    pk: 415
+-   fields: {book_value: '31.27', code: 415, date: 2013-06-20, earnings: '23.20', market_cap: 8000000,
+        pe: '5.40', roe: '0.25', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 4000
+
+########
+# SRX
+########
+-   fields: {code: 'SRX', desc: null, first_listed: 2013-06-19, is_listed: true, last_listed: 2013-06-20,
+        name: null}
+    model: stock.detail
+    pk: 515
+-   fields: {book_value: '31.27', code: 515, date: 2013-06-20, earnings: '23.20', market_cap: 4000000,
+        pe: '5.80', roe: '0.65', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 5000
