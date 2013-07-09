@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.template import RequestContext
 
 from forms import RankForm
-from lib.ranker import RankMethod, FilterMethod, Ranker
+from magicranker.rank.Ranker import RankMethod, FilterMethod, Ranker
 
 
 def main(request):
@@ -21,18 +21,24 @@ def rank(request):
         if form.is_valid():
             rank_methods = form.get_rank_methods()
             filter_methods = form.get_filter_methods()
-            limit = int(form.cleaned_data['limit'])
+            if 'limit' in form.cleaned_data:
+                limit = int(form.cleaned_data['limit'])
+            else:
+                limit = None
             #data = cache.get(hash(tuple(rank_methods + filter_methods)))
             data = None
             if not data:
                 ranker = Ranker(
                     rank_methods, filter_methods, limit)
                 data = ranker.process()
+                print rank_methods
+
                 cache.set(
                     hash(tuple(rank_methods + filter_methods)), data,  60*60*24)
 
             args['rank_results'] = data
 	else:
+            print form.errors
             form = RankForm()
 
         args['form'] = form

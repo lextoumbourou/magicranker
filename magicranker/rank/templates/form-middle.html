@@ -20,9 +20,10 @@
                         <div class="row-fluid">
                             <div class="span6">
                                 <button type="button" 
-                                        class="btn btn-small" 
-                                        id="roe_check" 
-                                        data-toggle="button">Yes</button>
+                                        class="btn btn-primary btn-small" 
+                                        id="roe_check_btn" 
+                                        data-toggle="button" value="1">Yes</button>
+                                <input type="hidden" name="rank_roe" value="0">
                             </div>
                             <div class="span6">
                                 <label class="checkbox">
@@ -179,9 +180,10 @@
                             <div class="row-fluid"> 
                                 <div class="span12">
                                     <div class="btn-group" data-toggle="buttons-radio">
-                                        <button type="button" class="btn btn-small" type="radio" name="limit" value="50" checked /><label for="limit_50">50</label> 
-                                        <button type="button" class="btn btn-small" type="radio" name="limit" value="30" checked /><label for="limit_50">30</label> 
-                                        <button type="button" class="btn btn-small" type="radio" name="limit" value="10" checked /><label for="limit_50">10</label> 
+                                        <button type="button" class="btn btn-small" type="radio" name="limit" value="50" checked /><label for="limit_50">50</label></button>
+                                        <button type="button" class="btn btn-small" type="radio" name="limit" value="30" /><label for="limit_50">30</label></button>
+                                        <button type="button" class="btn btn-small" type="radio" name="limit" value="10" /><label for="limit_50">10</label></button>
+                                        <input type="hidden" name="limit" value="50">
                                     </div>
                                 </div>
                             </div>
@@ -194,5 +196,3 @@
                         <button id="main_submit" name="main_submit" type="submit" class="btn">Submit</button> 
                     </div> 
                 </div>
-
-  
