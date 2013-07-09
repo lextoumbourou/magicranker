@@ -15,12 +15,14 @@ class RankMethod():
         self.max = max
         self.order = order
 		
+
 class FilterMethod():
     def __init__(self, name, average=False,
                  min=False, max=False, filter_after=False):
         self.name = name
         self.min = min
         self.max = max
+
 
 class Ranker():
     def __init__(self, rank_methods, filter_methods, limit=50):
@@ -48,8 +50,6 @@ class Ranker():
            .distinct('code__code'))
 
         for method in self.filter_methods + self.rank_methods:
-            print method.name
-            print method.min
             if method.min:
                 filter = method.name + '__gte'
                 results = results.filter(**{filter: method.min})
@@ -116,7 +116,7 @@ class Ranker():
 
     def _get_price(self, stock, date, order=''):
         '''
-        Returns the closest possible price based on a date
+        Return the closest possible price based on a date
         '''
         # Make a 5 day range to select from
         if not order:
