@@ -8,10 +8,11 @@
    <table class="table table-striped">
         {% for stock in rank_results %}
             {% if forloop.first %}
-          <thead><tr>
+        <thead>
+            <tr>
              <th>Rank</th>
-             {% if stock.code %}  <th>Code</th>{% endif %}
-             {% if stock.code.name %}<th>Name</th>{% endif %}
+             <th>Code</th>
+             <th>Name</th>
              {% if stock.roe %}<th>ROE</th>{% endif %}
              {% if stock.pe %}<th>PE</th>{% endif %}
              {% if stock.market_cap %}<th>Market Cap</th>{% endif %}
@@ -21,8 +22,8 @@
       {% endif %}
       <tr>
              <td>{{ forloop.counter }}</td>
-             {% if stock.code %}  <td><a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.code }}</a></td>{% endif %}
-             {% if stock.code.name %}<td><a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.code.name }}</a></td>{% endif %}
+             <td>{% if stock.code %}<a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.code }}</a>{% endif %}</td>
+             <td>{% if stock.code.name %}<a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.code.name }}</a>{% endif %}</td>
              {% if stock.roe %}<td>{{ stock.roe|percentage }}</td>{% endif %}
              {% if stock.pe %}<td>{{ stock.pe }}</td>{% endif %}
              {% if stock.market_cap %}<td>{{ stock.market_cap|intword }}</td>{% endif %}
