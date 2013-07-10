@@ -23,5 +23,5 @@ function click_option(field_name)
 
 click_option('rank_roe');
 click_option('rank_pe');
-click_option('filt_market_cap');
-click_option('filt_debt');
+click_option('filter_market_cap');
+click_option('filtre_debt');

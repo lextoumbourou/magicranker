@@ -22,20 +22,20 @@ class RankForm(forms.Form):
     rank_debt_per = forms.BooleanField(required=False)
 
     # Filters
-    filt_roe = forms.BooleanField(required=False)
-    filt_roe_min = forms.IntegerField(min_value=0, required=False)
-    filt_roe_max = forms.IntegerField(required=False)
+    filter_roe = forms.BooleanField(required=False)
+    filter_roe_min = forms.IntegerField(min_value=0, required=False)
+    filter_roe_max = forms.IntegerField(required=False)
 
-    filt_pe = forms.BooleanField(required=False)
-    filt_pe_min = forms.IntegerField(min_value=0, required=False)
-    filt_pe_max = forms.IntegerField(min_value=0, required=False)
+    filter_pe = forms.BooleanField(required=False)
+    filter_pe_min = forms.IntegerField(min_value=0, required=False)
+    filter_pe_max = forms.IntegerField(min_value=0, required=False)
 
-    filt_market_cap = forms.BooleanField(required=False)
-    filt_market_cap_min = forms.IntegerField(
-        min_value=0, max_value=1000000000, required=False)
+    filter_market_cap = forms.BooleanField(required=False)
+    filter_market_cap_min = forms.IntegerField(
+        min_value=0, max_value=1000000000, initial=0)
         
-    filt_debt_per = forms.BooleanField(required=False)
-    filt_debt_per = forms.IntegerField(required=False)
+    filter_debt_per = forms.BooleanField(required=False)
+    filter_debt_per = forms.IntegerField(required=False)
 
     # Limit
     limit = forms.ChoiceField(
@@ -58,42 +58,42 @@ class RankForm(forms.Form):
                   min=self.cleaned_data.get('rank_pe_min', 0),
                   max=self.cleaned_data.get('rank_pe_max'), 
                   order='pe'))
-        if self.cleaned_data.get('market_cap_rank'):
+        if self.cleaned_data.get('rank_market_cap'):
             # Market Cap is ordered from highest to lowest
             output.append(RankMethod(
                 name='market_cap', 
-                min=self.cleaned_data.get('market_cap_min'),
+                min=self.cleaned_data.get('rank_market_cap_min'),
                 order='market_cap'))
-        if self.cleaned_data.get('debt_per_rank'):
+        if self.cleaned_data.get('rank_debt'):
             # Debt is ordered from lowest to highest
             output.append(Rank_Method(
                 name='debt_per', 
-                max=self.cleaned_data.get('debt_per_max'),
+                max=self.cleaned_data.get('rank_debt_max'),
                 order='-debt_per'))
         return output
 
     def get_filter_methods(self):
         output = []
+        cd = self.cleaned_data
         if self.cleaned_data.get('filter_roe'):
+            cd = self.cleaned_data
             # Roe is ordered from highest to lowest
-            output.append(Filter_Method(
+            output.append(FilterMethod(
                 name='roe', min=cd['roe_rank_min'],
                 max=cd['roe_rank_max']))
         if self.cleaned_data.get('filter_pe'):
               # Pe is ordered from lowest to highest
-              output.append(Filter_Method(
+              output.append(FilterMethod(
                   name='pe', min=cd['pe_rank_min'],
                   max=cd['pe_rank_max']))
         if self.cleaned_data.get('filter_market_cap'):
             # Market Cap is ordered from highest to lowest
-            output.append(Filter_Method(
-                name='market_cap', min=cd['market_cap_min'],
-                order='market_cap'))
-        if self.cleaned_data.get('filter_debt_per'):
+            output.append(FilterMethod(
+                name='market_cap', min=self.cleaned_data['filter_market_cap_min']))
+        if self.cleaned_data.get('filter_debt'):
             # Debt is ordered from lowest to highest
-            output.append(Filter_Method(
-                name='debt_per', max=cd['debt_per_max'],
-                order='-debt_per'))
+            output.append(FilterMethod(
+                name='debt_per', max=self.cleaned_data['filter_debt_max']))
         return output
 
 
