@@ -9,19 +9,14 @@ class RankForm(forms.Form):
                      ('4','4'))
     # Ranks
     rank_roe = forms.BooleanField(required=False)
-    rank_roe_average = forms.ChoiceField(
-        required=False, choices=(
-            ('0','0'),('2','2'),('3','3'),('5','5'),('10','10'),))
-    rank_roe_max = forms.ChoiceField(
-        required=False, choices=(
-            ('', 'infinity'),('1.0', '100'),('0.70','70'),
-            ('0.50','50'),('0.30','30')))
+    rank_roe_avg = forms.IntegerField(
+        min_value=1, max_value=10, initial=1, required=False)
+    rank_roe_max = forms.DecimalField(
+        min_value=0, max_value=1, initial=0.70, required=False)
 
     rank_pe = forms.BooleanField(required=False)
-    rank_pe_min = forms.ChoiceField(
-        required=False, choices=(
-            ('0', ''),('2', '2'),('3','3'),
-            ('5','5'),('10','10')))
+    rank_pe_min = forms.IntegerField(
+        min_value=0, max_value=10, initial=0, required=False)
 
     rank_market_cap = forms.BooleanField(required=False)
     rank_debt_per = forms.BooleanField(required=False)
@@ -32,15 +27,13 @@ class RankForm(forms.Form):
     filt_roe_max = forms.IntegerField(required=False)
 
     filt_pe = forms.BooleanField(required=False)
-    filt_pe_min = forms.IntegerField(required=False)
-    filt_pe_max = forms.IntegerField(required=False)
+    filt_pe_min = forms.IntegerField(min_value=0, required=False)
+    filt_pe_max = forms.IntegerField(min_value=0, required=False)
 
     filt_market_cap = forms.BooleanField(required=False)
-    filt_market_cap_min = forms.ChoiceField(
-        required=False, choices=(
-            ('0', '0'),('250000000', '250'),('5000000','500'),
-            ('1000000000','1000'),))
-
+    filt_market_cap_min = forms.IntegerField(
+        min_value=0, max_value=1000000000, required=False)
+        
     filt_debt_per = forms.BooleanField(required=False)
     filt_debt_per = forms.IntegerField(required=False)
 
