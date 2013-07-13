@@ -28,7 +28,6 @@ def rank(request):
             #data = cache.get(hash(tuple(rank_methods + filter_methods)))
             data = None
             if not data:
-                print filter_methods
                 ranker = Ranker(
                     rank_methods, filter_methods, limit)
                 data = ranker.process()
