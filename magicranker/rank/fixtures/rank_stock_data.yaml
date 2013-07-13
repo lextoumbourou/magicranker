@@ -1,7 +1,7 @@
 ########
 # ANZ 
 ########
--   fields: {code: 'ANZ', desc: null, first_listed: 2013-06-19, is_listed: true, last_listed: 2013-06-20,
+-   fields: {name: 'Australia New Zealand Bank', code: 'ANZ', desc: null, first_listed: 2013-06-19, is_listed: true, last_listed: 2013-06-20,
         name: null}
     model: stock.detail
     pk: 215
@@ -9,6 +9,26 @@
         pe: '8.50', roe: '0.09', shares_outstanding: 216100000}
     model: stock.pershare
     pk: 2000
+-   fields: {book_value: '21.27', code: 215, date: 2012-06-20, earnings: '21.20', market_cap: 6300000,
+        pe: '8.40', roe: '0.10', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 2001
+-   fields: {book_value: '20.27', code: 215, date: 2011-06-20, earnings: '21.50', market_cap: 6100000,
+        pe: '7.40', roe: '0.10', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 2002
+-   fields: {book_value: '19.27', code: 215, date: 2010-06-20, earnings: '20.50', market_cap: 6100000,
+        pe: '6.40', roe: '0.10', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 2003
+-   fields: {book_value: '20.27', code: 215, date: 2009-06-20, earnings: '19.50', market_cap: 8100000,
+        pe: '7.20', roe: '0.12', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 2004
+-   fields: {book_value: '18.18', code: 215, date: 2008-06-20, earnings: '18.20', market_cap: 7300000,
+        pe: '6.90', roe: '0.13', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 2005
 
 ########
 # CBA
@@ -21,6 +41,26 @@
         pe: '9.40', roe: '0.40', shares_outstanding: 216100000}
     model: stock.pershare
     pk: 3000
+-   fields: {book_value: '21.45', code: 315, date: 2012-06-20, earnings: '15.70', market_cap: 6450000,
+        pe: '8.90', roe: '0.21', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 3001
+-   fields: {book_value: '20.27', code: 315, date: 2011-06-20, earnings: '21.50', market_cap: 6100000,
+        pe: '7.90', roe: '0.22', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 3002
+-   fields: {book_value: '19.27', code: 315, date: 2010-06-20, earnings: '20.50', market_cap: 6100000,
+        pe: '6.90', roe: '0.24', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 3003
+-   fields: {book_value: '20.27', code: 315, date: 2009-06-20, earnings: '19.50', market_cap: 8100000,
+        pe: '7.90', roe: '0.26', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 3004
+-   fields: {book_value: '18.18', code: 315, date: 2008-06-20, earnings: '18.20', market_cap: 7300000,
+        pe: '8.90', roe: '0.23', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 3005
 
 ########
 # ARB
@@ -30,18 +70,58 @@
     model: stock.detail
     pk: 415
 -   fields: {book_value: '31.27', code: 415, date: 2013-06-20, earnings: '23.20', market_cap: 8000000,
-        pe: '5.40', roe: '0.25', shares_outstanding: 216100000}
+        pe: '5.40', roe: '2.25', shares_outstanding: 216100000}
     model: stock.pershare
     pk: 4000
+-   fields: {book_value: '21.45', code: 415, date: 2012-06-20, earnings: '15.70', market_cap: 6450000,
+        pe: '8.90', roe: '0.34', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 4001
+-   fields: {book_value: '20.27', code: 415, date: 2011-06-20, earnings: '21.50', market_cap: 6100000,
+        pe: '7.90', roe: '0.36', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 4002
+-   fields: {book_value: '19.27', code: 415, date: 2010-06-20, earnings: '20.50', market_cap: 6100000,
+        pe: '6.90', roe: '0.37', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 4003
+-   fields: {book_value: '20.27', code: 415, date: 2009-06-20, earnings: '19.50', market_cap: 8100000,
+        pe: '7.90', roe: '0.38', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 4004
+-   fields: {book_value: '18.18', code: 415, date: 2008-06-20, earnings: '18.20', market_cap: 7300000,
+        pe: '8.90', roe: '0.13', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 4005
+
 
 ########
 # SRX
 ########
--   fields: {code: 'SRX', desc: null, first_listed: 2013-06-19, is_listed: true, last_listed: 2013-06-20,
-        name: null}
+-   fields: {code: 'SRX', desc: null, first_listed: 2013-06-19, is_listed: true, last_listed: 2013-06-20, name: null}
     model: stock.detail
     pk: 515
 -   fields: {book_value: '31.27', code: 515, date: 2013-06-20, earnings: '23.20', market_cap: 4000000,
         pe: '5.80', roe: '0.65', shares_outstanding: 216100000}
     model: stock.pershare
     pk: 5000
+-   fields: {book_value: '21.45', code: 515, date: 2012-06-20, earnings: '15.70', market_cap: 6450000,
+        pe: '8.90', roe: '0.62', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 5001
+-   fields: {book_value: '20.27', code: 515, date: 2011-06-20, earnings: '21.50', market_cap: 6100000,
+        pe: '7.90', roe: '0.61', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 5002
+-   fields: {book_value: '19.27', code: 515, date: 2010-06-20, earnings: '20.50', market_cap: 6100000,
+        pe: '6.90', roe: '0.55', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 5003
+-   fields: {book_value: '20.27', code: 515, date: 2009-06-20, earnings: '19.50', market_cap: 8100000,
+        pe: '7.90', roe: '0.43', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 5004
+-   fields: {book_value: '18.18', code: 515, date: 2008-06-20, earnings: '18.20', market_cap: 7300000,
+        pe: '8.90', roe: '0.52', shares_outstanding: 216100000}
+    model: stock.pershare
+    pk: 5005
