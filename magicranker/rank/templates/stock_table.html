@@ -24,7 +24,7 @@
       <tr>
              <td>{{ forloop.counter }}</td>
              <td>{% if stock.code %}<a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.code }}</a>{% endif %}</td>
-             <td>{% if stock.name %}<a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.code.name }}</a>{% endif %}</td>
+             <td>{% if stock.name %}<a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.name }}</a>{% endif %}</td>
              {% if stock.roe %}<td>{{ stock.roe|percentage }}</td>{% endif %}
              {% if stock.roe__avg %}<td>{{ stock.roe__avg|percentage }}</td>{% endif %}
              {% if stock.pe %}<td>{{ stock.pe }}</td>{% endif %}

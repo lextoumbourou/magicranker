@@ -75,9 +75,9 @@ class Ranker():
                 continue
 
             current.update(average)
+            print stock.name
             current['name'] = stock.name
             current['code'] = stock.code
-
 
             stocks.append(current)
 
@@ -198,4 +198,6 @@ class Ranker():
             stocks = self._get_filtered_query(rank_method)
             ranks[rank_method.name] = self._get_rank(rank_method, stocks)
 
-        return self._get_total_rank(ranks)
+        final = self._get_total_rank(ranks)
+        print final
+        return final
