@@ -1,6 +1,6 @@
 from django import forms
 
-from lib.ranker import RankMethod, FilterMethod
+from magicranker.rank.Ranker import RankMethod, FilterMethod
 
 class RankForm(forms.Form):
     ORDER_CHOICES = (('1','1'),
@@ -47,17 +47,17 @@ class RankForm(forms.Form):
             # Roe is ordered from highest to lowest
             output.append(RankMethod(
                 name='roe', 
-                average=self.cleaned_data.get('rank_roe_avg', 0), 
                 min=self.cleaned_data.get('rank_roe_min', 0.05),
                 max=self.cleaned_data.get('rank_roe_max', 0.70), 
-                order='-roe'))
-        if self.cleaned_data.get('rank_pe'):
-              # Pe is ordered from lowest to highest
-              output.append(RankMethod(
-                  name='pe', 
-                  min=self.cleaned_data.get('rank_pe_min', 0),
-                  max=self.cleaned_data.get('rank_pe_max'), 
-                  order='pe'))
+                average=self.cleaned_data.get('rank_roe_avg', 0), 
+                desc=True))
+        #if self.cleaned_data.get('rank_pe'):
+        #    print "For some reason I'm here"
+        #    # Pe is ordered from lowest to highest
+        #    output.append(RankMethod(
+        #        name='pe', 
+        #        min=self.cleaned_data.get('rank_pe_min', 0),
+        #        max=self.cleaned_data.get('rank_pe_max')))
         if self.cleaned_data.get('rank_market_cap'):
             # Market Cap is ordered from highest to lowest
             output.append(RankMethod(
@@ -66,7 +66,7 @@ class RankForm(forms.Form):
                 order='market_cap'))
         if self.cleaned_data.get('rank_debt'):
             # Debt is ordered from lowest to highest
-            output.append(Rank_Method(
+            output.append(RankMethod(
                 name='debt_per', 
                 max=self.cleaned_data.get('rank_debt_max'),
                 order='-debt_per'))
