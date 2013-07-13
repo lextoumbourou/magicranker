@@ -1,19 +1,20 @@
-import datetime as dt
-from django.db.models import Max
-
-from magicranker.stock.models import PerShare
-
 from operator import itemgetter
+import datetime as dt
+from dateutil.relativedelta import relativedelta
+
+from django.db.models import Avg
+
+from magicranker.stock.models import PerShare, Detail
 
 
 class RankMethod():
     def __init__(self, name, average=False,
-                 min=False, max=False, order=False):
+                 min=False, max=False, desc=False):
         self.name = name
-        self.averge = average
+        self.average = average
         self.min = min
         self.max = max
-        self.order = order
+        self.desc = desc
 		
 
 class FilterMethod():
@@ -32,92 +33,132 @@ class Ranker():
         self.filter_methods = filter_methods
         self.limit = limit
 
-    def _get_filtered_query(self, date=None):
+    def _get_filtered_query(self, rank_method, date=None):
+        """ Return a list of PerShare objects converted to dicts
+        one per company in the market
+
+        If average is requested in the rank_method, also get the averaged value for the 
+        time period requested
         """
-        Returns a PerShare queryset, based on filter parameters
-        """
+        stocks = []
+        average = None
+
         if not date:
             date = dt.datetime.now()
 
-        last_year = date - dt.timedelta(days=365)
-        # Get filtered items as close as possible 
-        # to date in between the year, used for performing
-        # a rank in the past
-        results = (PerShare.objects
-           .filter(date__lte=date)
-           .filter(date__gte=last_year)
-           .order_by('code', '-date')
-           .distinct('code__code'))
+        for stock in Detail.objects.filter(is_listed=True):
+            current = {}
+            if rank_method.average:
+                old_date = date - relativedelta(years=rank_method.average)
+            else:
+                old_date = date - relativedelta(years=1)
 
-        for method in self.filter_methods + self.rank_methods:
-            if method.min:
-                filter = method.name + '__gte'
-                results = results.filter(**{filter: method.min})
-            if method.max:
-                filter = method.name + '__lte'
-                results = results.filter(**{filter: method.max})
+            results = (PerShare.objects
+               .filter(code=stock.pk)
+               .filter(date__lte=date)
+               .filter(date__gte=old_date)
+               .order_by('-date'))
 
-        # Built in filters to clear out negative returns
-        results = results.filter(roe__gt=0).filter(pe__gt=0)
+            average = {}
+            # Get average
+            if rank_method.average:
+                average = results.aggregate(Avg(rank_method.name))
 
-        return results.values_list('pk', flat=True)
+            try:
+                current = results.values()[0]
+            except IndexError:
+                continue
 
-    def _get_rank(self, queryset):
+            # If we don't have data for the company that goes back far enough
+            # we skip them
+            if results[results.count()-1].date.year == old_date.year:
+                continue
+
+            current.update(average)
+            current['name'] = stock.name
+            current['code'] = stock.code
+
+
+            stocks.append(current)
+
+        return stocks
+
+    def _get_rank(self, rank_method, stocks):
+        """ Sort list of dictionary either by name requested
+        in rank_method of by the averaged value
         """
-        Returns a dict with ranked values
-        """
-        output = {}
-        query = PerShare.objects.filter(pk__in=queryset)
+        output = []
 
-        for method in self.rank_methods:
-            output[method.name] = []
-            count = 1
-            for val in query.order_by(method.order):
-                # Create a dictionary mapping of stock object to rank
-                if val:
-                    result = {val:count}
-                    output[method.name].append(result)
-                    count += 1
+        sort_key = rank_method.name
+        if rank_method.average:
+            sort_key = sort_key + '__avg'
+
+        stocks = sorted(
+            stocks, key=itemgetter(sort_key),
+            reverse=rank_method.desc)
+
+        # Sort the list of dictionaries by the rank method
+        for rank, stock in enumerate(stocks):
+            # Create a dictionary mapping of stock object to rank
+            result = {stock['code_id']: (rank, stock)}
+            output.append(result)
 
         return output
 
     def _get_total_rank(self, rank_results):
-        """
-        Adds the rank, to get the total rank
+        """ Get the ranked data and add it together to get the total rank
         """
         output = {}
         for name, ranks in rank_results.iteritems():
             for rank in ranks:
-                for stock, count in rank.iteritems():
+                for stock_id, data in rank.iteritems():
+                    rank_value = data[0]
+                    stock_obj = data[1]
+                    # Don't append stock if it doesn't
+                    # match filter criteria
+                    will_append = True
+
+                    for method in self.filter_methods + self.rank_methods:
+                        filter_key = method.name
+                        if hasattr(method, 'average') and method.average:
+                            avg_filter_key = filter_key + '__avg'
+                            if avg_filter_key in stock_obj:
+                                filter_key = avg_filter_key
+
+                        if ((method.min and (stock_obj[filter_key] < method.min)) or
+                           (method.max and (stock_obj[filter_key] > method.max))):
+                            will_append = False
+                            break
+
                     # Increment value or initialise
-                    output[stock] = output.get(stock, 0) + count
-        return output
+                    if will_append:
+                        if stock_id in output:
+                            current_rank = output[stock_id]['rank']
+                            output[stock_id]['rank'] = current_rank + rank_value
+                        else:
+                            output[stock_id] = stock_obj
+                            output[stock_id]['rank'] = rank_value
 
-    def _sort(self, dict_to_sort, limit):
-        """
-        Sorts the dictionary mapping to tupple
-        """
-        output = []
-        first_sort = sorted(dict_to_sort.items(), key=itemgetter(1))[:limit]
-        for f in first_sort:
-            output.append(f[0])
-
-        return output
+        # Convert a list of dicts and sort
+        unsorted_stocks = [d for _, d in output.iteritems()]
+        return sorted(unsorted_stocks, key=itemgetter('rank'))[:self.limit]
 
     def _is_loss(self, cur_price, pre_price):
-        '''
-        Takes two decimal objects (current & previous) and determines 
+        """ Take two decimal objects (current & previous) and determines 
         whether you've made a loss or not
-        '''
+
+        ** Not currently implemented **
+        """
         if cur_price < pre_price:
             return True
         else:
             return False
 
     def _get_price(self, stock, date, order=''):
-        '''
-        Return the closest possible price based on a date
-        '''
+        """ Return the closest possible price based on a date
+
+        ** Not currently implemented **
+        """
         # Make a 5 day range to select from
         if not order:
             start = date
@@ -137,10 +178,11 @@ class Ranker():
         return price_obj
 
     def _get_tax_price(self, stock, year, is_loss=False):
-        '''
-        Returns a price object before or after the tax
+        """ Return a price object before or after the tax
         year depending on whether you've made a win or a loss
-        '''
+
+        ** Not currently implemented **
+        """
         if not is_loss:
             date = dt.datetime(year=year, month=07, day=01)
             price = self._get_price(stock, date)
@@ -151,7 +193,9 @@ class Ranker():
         return price
 
     def process(self):
-        query = self._get_filtered_query()
-        ranks = self._get_rank(query)
-        final_rank = self._get_total_rank(ranks)
-        return self._sort(final_rank, self.limit)
+        ranks = {}
+        for rank_method in self.rank_methods:
+            stocks = self._get_filtered_query(rank_method)
+            ranks[rank_method.name] = self._get_rank(rank_method, stocks)
+
+        return self._get_total_rank(ranks)
