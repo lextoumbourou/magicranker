@@ -14,6 +14,7 @@
              <th>Code</th>
              <th>Name</th>
              {% if stock.roe %}<th>ROE</th>{% endif %}
+             {% if stock.roe__avg %}<th>ROE Average</th>{% endif %}
              {% if stock.pe %}<th>PE</th>{% endif %}
              {% if stock.market_cap %}<th>Market Cap</th>{% endif %}
              {% if stock.debt_perc %}<th>Debt</th>{% endif %}
@@ -23,8 +24,9 @@
       <tr>
              <td>{{ forloop.counter }}</td>
              <td>{% if stock.code %}<a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.code }}</a>{% endif %}</td>
-             <td>{% if stock.code.name %}<a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.code.name }}</a>{% endif %}</td>
+             <td>{% if stock.name %}<a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.code.name }}</a>{% endif %}</td>
              {% if stock.roe %}<td>{{ stock.roe|percentage }}</td>{% endif %}
+             {% if stock.roe__avg %}<td>{{ stock.roe__avg|percentage }}</td>{% endif %}
              {% if stock.pe %}<td>{{ stock.pe }}</td>{% endif %}
              {% if stock.market_cap %}<td>{{ stock.market_cap|intword }}</td>{% endif %}
              {% if stock.debt_perc %}<td>{{ stock.debt_perc }}%</td>{% endif %}
