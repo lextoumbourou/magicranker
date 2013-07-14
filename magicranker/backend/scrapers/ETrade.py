@@ -132,7 +132,7 @@ class ETrade():
 
             data['periods'] = self._get_dates(trs)
             data['roe'] = self._get_values(trs, 'Return on equity (%)')
-            // Convert percentage to fraction
+            # Convert percentage to fraction
             data['roe'] = float(data['roe']) / 100.
 
             # Get 3rd last table (should have Per Share stats in it)
