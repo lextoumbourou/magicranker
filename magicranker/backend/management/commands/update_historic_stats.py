@@ -24,6 +24,10 @@ class Command(BaseCommand):
                 kwargs['earnings'] = None
             try:
                 kwargs['roe'] = data['roe'][count]
+                # Convert percentage to fraction
+                if kwargs['roe']:
+                    kwargs['roe'] = float(data['roe']) / 100.
+
             except IndexError:
                 kwargs['roe'] = None
             try:
