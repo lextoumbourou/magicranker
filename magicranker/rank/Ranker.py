@@ -75,9 +75,15 @@ class Ranker():
                 continue
 
             current.update(average)
-            print stock.name
             current['name'] = stock.name
             current['code'] = stock.code
+            
+            filter_key = rank_method.name
+            if rank_method.average:
+                filter_key = filter_key + '__avg'
+
+            if not current[filter_key]:
+                continue
 
             stocks.append(current)
 
@@ -100,7 +106,7 @@ class Ranker():
         # Sort the list of dictionaries by the rank method
         for rank, stock in enumerate(stocks):
             # Create a dictionary mapping of stock object to rank
-            result = {stock['code_id']: (rank, stock)}
+            result = {stock['code_id']: (rank + 1, stock)}
             output.append(result)
 
         return output
@@ -126,7 +132,8 @@ class Ranker():
                                 filter_key = avg_filter_key
 
                         if ((method.min and (stock_obj[filter_key] < method.min)) or
-                           (method.max and (stock_obj[filter_key] > method.max))):
+                           (method.max and (stock_obj[filter_key] > method.max)) or 
+                           (stock_obj[filter_key] is None)):
                             will_append = False
                             break
 
@@ -199,5 +206,4 @@ class Ranker():
             ranks[rank_method.name] = self._get_rank(rank_method, stocks)
 
         final = self._get_total_rank(ranks)
-        print final
         return final
