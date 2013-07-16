@@ -270,11 +270,8 @@ class YahooFinance():
 
         try:
             soup = BeautifulSoup(utils.get_page(url))
-        except urllib2.URLError, e:
-            print "Can't hit URL ", e
-            return False
-        except urllib2.BadStatusLine, e:
-            print "Got a bad status line trying to hit URL ", e
+        except:
+            print "HTTP Request failed. Skipping."
             return False
 
         try:
