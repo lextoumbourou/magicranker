@@ -15,4 +15,26 @@ class Command(BaseCommand):
             print stock.code
             yf = YahooFinance.YahooFinance(stock)
             data = yf.get_bal_sheet()
-            print data
+            if not data:
+                continue
+
+            if 'period_ending' in data:
+                dates = data['period_ending']
+            
+            for count, date in enumerate(dates):
+                if date is None:
+                    continue
+
+                print "Stock is ", stock
+                print "Date is ", date
+
+                for key in data:
+                    if key == 'period_ending':
+                        continue
+
+                    obj, created = BalSheet.objects.get_or_create(
+                        code=stock, period_ending=date)
+
+                    result = data[key][count]
+                    setattr(obj, key, result) 
+                    obj.save()
