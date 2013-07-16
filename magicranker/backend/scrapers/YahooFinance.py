@@ -1,3 +1,4 @@
+import urllib2
 import re
 import time
 import logging
@@ -266,7 +267,16 @@ class YahooFinance():
         output = {}
         url = 'http://finance.yahoo.com/q/'
         url += 'bs?s={0}.AX+Balance+Sheet&annual'.format(self.stock.code)
-        soup = BeautifulSoup(utils.get_page(url))
+
+        try:
+            soup = BeautifulSoup(utils.get_page(url))
+        except urllib2.URLError, e:
+            print "Can't hit URL ", e
+            return False
+        except urllib2.BadStatusLine, e:
+            print "Got a bad status line trying to hit URL ", e
+            return False
+
         try:
             dates_html = soup.findAll('td', "yfnc_modtitle1")
             date_title = dates_html[0].small.span.string
