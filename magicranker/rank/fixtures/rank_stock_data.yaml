@@ -29,6 +29,9 @@
         pe: '6.90', roe: '0.13', shares_outstanding: 216100000}
     model: stock.pershare
     pk: 2005
+-   fields: {code: 215, total_liabilities: 1000, total_assets: 2100, period_ending: 2013-06-20}
+    model: stock.balsheet
+    pk: 100
 
 ########
 # CBA
@@ -61,6 +64,10 @@
         pe: '8.90', roe: '0.23', shares_outstanding: 216100000}
     model: stock.pershare
     pk: 3005
+-   fields: {code: 315, total_liabilities: 5000, total_assets: 7000, period_ending: 2013-06-20}
+    model: stock.balsheet
+    pk: 200
+
 
 ########
 # ARB
@@ -93,6 +100,9 @@
         pe: '8.90', roe: '0.13', shares_outstanding: 216100000}
     model: stock.pershare
     pk: 4005
+-   fields: {code: 415, total_liabilities: 100, total_assets: 230, period_ending: 2013-06-20}
+    model: stock.balsheet
+    pk: 300
 
 
 ########
@@ -125,3 +135,6 @@
         pe: '8.90', roe: '0.52', shares_outstanding: 216100000}
     model: stock.pershare
     pk: 5005
+-   fields: {code: 515, total_liabilities: 600, total_assets: 900, period_ending: 2013-06-20}
+    model: stock.balsheet
+    pk: 400

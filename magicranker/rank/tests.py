@@ -50,3 +50,13 @@ class RankerTest(TestCase):
 
         self.assertTrue(results[0]['code'] == 'ARB')
         self.assertTrue(results[-1]['code'] == 'ANZ')
+
+    def testRankAndFilterRemovesCompaniesWithHighDebt(self):
+        debt_filter = FilterMethod(name='debt_percentage', max=0.50)
+        roe_rank = RankMethod(name='roe', max=10, desc=True)
+        ranker = Ranker([roe_rank], [debt_filter], limit=50)
+        results = ranker.process()
+
+        self.assertTrue(all([result['code'] != 'SRX' for result in results]))
+        self.assertTrue(any([result['code'] == 'ANZ' for result in results]))
+        self.assertTrue(len(results) == 2)

@@ -4,7 +4,7 @@ from dateutil.relativedelta import relativedelta
 
 from django.db.models import Avg
 
-from magicranker.stock.models import PerShare, Detail
+from magicranker.stock.models import PerShare, Detail, BalSheet
 
 
 class RankMethod():
@@ -77,7 +77,15 @@ class Ranker():
             current.update(average)
             current['name'] = stock.name
             current['code'] = stock.code
-            
+
+            bal_sheet = BalSheet.objects.filter(code=stock).order_by('-period_ending')[0]
+
+            if bal_sheet.total_liabilities and bal_sheet.total_assets:
+                current['debt_percentage'] = (
+                    bal_sheet.total_liabilities / float(bal_sheet.total_assets))
+            else:
+                current['debt_percentage'] = None
+
             filter_key = rank_method.name
             if rank_method.average:
                 filter_key = filter_key + '__avg'
