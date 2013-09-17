@@ -3,6 +3,7 @@ from decimal import Decimal
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.db import models
+from django_pandas.managers import DataFrameManager
 
 
 class Detail(models.Model):
@@ -30,6 +31,7 @@ class Sector(models.Model):
 class PerShare(models.Model):
     code = models.ForeignKey(Detail)
     date = models.DateField(null=True)
+    year = models.IntegerField()
     earnings = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True)
     roe = models.DecimalField(
@@ -40,6 +42,8 @@ class PerShare(models.Model):
         null=True, blank=True, max_digits=10, decimal_places=2)
     market_cap = models.BigIntegerField(null=True, blank=True)
     shares_outstanding = models.BigIntegerField(null=True, blank=True)
+
+    objects = DataFrameManager()
 
     def __unicode__(self):
         return '{0} - {1}'.format(self.code.code, self.date)

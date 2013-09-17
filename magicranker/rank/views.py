@@ -37,7 +37,7 @@ def rank(request):
                 cache.set(
                     hash(tuple(rank_methods + filter_methods)), data,  60*60*24)
 
-            args['rank_results'] = data
+            args['rank_results'] = data.iterrows()
 	else:
             form = RankForm()
 
@@ -56,7 +56,7 @@ def get_rank_methods(form_data):
             min=form_data.get('rank_roe_min', 0.05),
             max=form_data.get('rank_roe_max', 0.70), 
             average=form_data.get('rank_roe_avg', 0), 
-            desc=True))
+            ascending=False))
     if form_data.get('rank_pe'):
         # Pe is ordered from lowest to highest
         output.append(RankMethod(

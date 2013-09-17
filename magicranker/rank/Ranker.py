@@ -1,25 +1,24 @@
 from datetime import datetime
-from operator import itemgetter
-
-import data_generation
+from magicranker.stock.models import PerShare, Detail
+from dateutil.relativedelta import relativedelta
 
 
 class RankMethod():
     def __init__(self, name, average=False,
-                 min=False, max=False, desc=False):
+                 min=False, max=False, ascending=True):
         self.name = name
         self.average = average
         self.min = min
         self.max = max
-        self.desc = desc
+        self.ascending = ascending
 		
 
 class FilterMethod():
-    def __init__(self, name, average=False,
-                 min=False, max=False, filter_after=False):
+    def __init__(self, name, min=False, max=False):
         self.name = name
         self.min = min
         self.max = max
+        self.average = False
 
 
 class Ranker():
@@ -30,77 +29,59 @@ class Ranker():
         self.filter_methods = filter_methods
         self.limit = limit
 
-    def _get_rank(self, rank_method, stocks):
-        """ Sort list of dictionary either by name requested
-        in rank_method of by the averaged value
-        """
-        output = []
-
-        sort_key = rank_method.name
-        if rank_method.average:
-            sort_key = '{0}__avg__{1}'.format(
-                sort_key, rank_method.average)
-
-        stocks = sorted(
-            stocks, key=itemgetter(sort_key),
-            reverse=rank_method.desc)
-
-        # Sort the list of dictionaries by the rank method
-        for rank, stock in enumerate(stocks):
-            # Create a dictionary mapping of stock object to rank
-            result = {stock['code_id']: (rank + 1, stock)}
-            output.append(result)
-
-        return output
-
-    def _get_total_rank(self, rank_results):
-        """ Get the ranked data and add it together to get the total rank
-        """
-        output = {}
-        for name, ranks in rank_results.iteritems():
-            for rank in ranks:
-                for stock_id, data in rank.iteritems():
-                    rank_value = data[0]
-                    stock_obj = data[1]
-                    # Don't append stock if it doesn't
-                    # match filter criteria
-                    will_append = True
-
-                    for method in self.filter_methods + self.rank_methods:
-                        filter_key = method.name
-                        if hasattr(method, 'average') and method.average:
-                            avg_filter_key = '{0}__avg__{1}'.format(
-                                filter_key, method.average)
-                            if avg_filter_key in stock_obj:
-                                filter_key = avg_filter_key
-
-                        if ((method.min and (stock_obj[filter_key] < method.min)) or
-                           (method.max and (stock_obj[filter_key] > method.max)) or 
-                           (stock_obj[filter_key] is None)):
-                            will_append = False
-                            break
-
-                    # Increment value or initialise
-                    if will_append:
-                        if stock_id in output:
-                            current_rank = output[stock_id]['rank']
-                            output[stock_id]['rank'] = current_rank + rank_value
-                        else:
-                            output[stock_id] = stock_obj
-                            output[stock_id]['rank'] = rank_value
-
-        # Convert a list of dicts and sort
-        unsorted_stocks = [d for _, d in output.iteritems()]
-
-        return sorted(unsorted_stocks, key=itemgetter('rank'))[:self.limit]
-
     def process(self):
-        ranks = {}
         today = datetime.today()
-        stocks = data_generation.process()
 
-        for rank_method in self.rank_methods:
-            ranks[rank_method.name] = self._get_rank(rank_method, stocks)
+        results = PerShare.objects
 
-        final = self._get_total_rank(ranks)
-        return final
+        # Build up the filter using the requested filters
+        # also, determine how much data to pull from the db
+        # based on the highest average value requested
+        highest = 1
+        for method in self.rank_methods + self.filter_methods:
+            if method.average and method.average > highest:
+                highest = method.average
+                # If they have requested the values to be averaged, 
+                # we'll do the filtering after pulling from the db
+                continue
+            if method.min:
+                filter = method.name + '__gte'
+                results = results.filter(**{filter: method.min})
+            if method.max:
+                filter = method.name + '__lte'
+                results = results.filter(**{filter: method.max})
+            
+
+        period_starts = today - relativedelta(years=highest)
+        results = results.filter(date__lte=today).filter(date__gt=period_starts)
+        results = results.order_by('code__code', 'year', '-date').distinct('code__code', 'year')
+
+        # Create a list of fields in model to use as arguments (there might be a better way to do this)
+        fields = [f.name for f in PerShare._meta.fields[1:]]
+
+        # Convert data to a Pandas dataframe for easy processing. This is the slowest step in the process
+        data = results.to_dataframe(
+            'code__name', 'code__code', *fields, index='code', coerce_float=True)
+
+        ## Just get this years data
+        this_years_data = data[data.year == today.year]
+
+        # Create an empty rank table filled with zeros
+        this_years_data['total_rank'] = 0
+
+        # Create the ranks and do the filtering on averaged values
+        for method in self.rank_methods:
+            # Average if requested
+            if method.average and method.average > 1:
+                this_years_data[method.name] = (
+                    data[method.name].astype(float).groupby(data.index).mean())
+                # Filter on the averages
+                if method.min:
+                    this_years_data = this_years_data[this_years_data[method.name] > method.min]
+                if method.max:
+                    this_years_data = this_years_data[this_years_data[method.name] < method.max]
+
+            this_years_data['total_rank'] += (
+                this_years_data[method.name].rank(ascending=method.ascending))
+
+        return this_years_data.sort(['total_rank', 'code__code'])[:self.limit]

@@ -123,6 +123,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.humanize',
     'south',
+    'django_pandas',
     'magicranker.rank',
     'magicranker.stock',
     'magicranker.backend',
