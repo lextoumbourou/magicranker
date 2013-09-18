@@ -1,5 +1,5 @@
 from datetime import datetime
-from magicranker.stock.models import PerShare, Detail
+from magicranker.stock.models import PerShare
 from dateutil.relativedelta import relativedelta
 
 
@@ -11,7 +11,7 @@ class RankMethod():
         self.min = min
         self.max = max
         self.ascending = ascending
-		
+
 
 class FilterMethod():
     def __init__(self, name, min=False, max=False):
@@ -41,7 +41,7 @@ class Ranker():
         for method in self.rank_methods + self.filter_methods:
             if method.average and method.average > highest:
                 highest = method.average
-                # If they have requested the values to be averaged, 
+                # If they have requested the values to be averaged,
                 # we'll do the filtering after pulling from the db
                 continue
             if method.min:
@@ -50,18 +50,22 @@ class Ranker():
             if method.max:
                 filter = method.name + '__lte'
                 results = results.filter(**{filter: method.max})
-            
 
         period_starts = today - relativedelta(years=highest)
-        results = results.filter(date__lte=today).filter(date__gt=period_starts)
-        results = results.order_by('code__code', 'year', '-date').distinct('code__code', 'year')
+        results = results.filter(
+            date__lte=today).filter(date__gt=period_starts)
+        results = results.order_by(
+            'code__code', 'year', '-date').distinct('code__code', 'year')
 
-        # Create a list of fields in model to use as arguments (there might be a better way to do this)
+        # Create a list of fields in model to use as arguments
+        # (there might be a better way to do this)
         fields = [f.name for f in PerShare._meta.fields[1:]]
 
-        # Convert data to a Pandas dataframe for easy processing. This is the slowest step in the process
+        # Convert data to a Pandas dataframe for easy processing.
+        # This is the slowest step in the process
         data = results.to_dataframe(
-            'code__name', 'code__code', *fields, index='code', coerce_float=True)
+            'code__name', 'code__code',
+            *fields, index='code', coerce_float=True)
 
         ## Just get this years data
         this_years_data = data[data.year == today.year]
@@ -77,9 +81,11 @@ class Ranker():
                     data[method.name].astype(float).groupby(data.index).mean())
                 # Filter on the averages
                 if method.min:
-                    this_years_data = this_years_data[this_years_data[method.name] > method.min]
+                    this_years_data = this_years_data[
+                        this_years_data[method.name] > method.min]
                 if method.max:
-                    this_years_data = this_years_data[this_years_data[method.name] < method.max]
+                    this_years_data = this_years_data[
+                        this_years_data[method.name] < method.max]
 
             this_years_data['total_rank'] += (
                 this_years_data[method.name].rank(ascending=method.ascending))
