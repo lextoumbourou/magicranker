@@ -21,7 +21,17 @@ function click_option(field_name)
     });
 }
 
+function limit_click()
+{
+    $(".limit_btn").on('click', '', function() {
+        $(".limit_btn").removeClass('btn-primary');
+        $(this).addClass('btn-primary');
+        var rank_input = $("input[name='limit']").val($(this).attr('value'));
+    });
+}
+
 click_option('rank_roe');
 click_option('rank_pe');
 click_option('filter_market_cap');
-click_option('filtre_debt');
+click_option('filter_debt');
+limit_click();

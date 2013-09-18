@@ -181,9 +181,9 @@
                             <div class="row-fluid"> 
                                 <div class="span12">
                                     <div class="btn-group" data-toggle="buttons-radio">
-                                        <button type="button" class="btn btn-small limit_btn" type="radio" name="limit" value="50" checked /><label for="limit_50">50</label></button>
-                                        <button type="button" class="btn btn-small limit_btn" type="radio" name="limit" value="30" /><label for="limit_50">30</label></button>
-                                        <button type="button" class="btn btn-small limit_btn" type="radio" name="limit" value="10" /><label for="limit_50">10</label></button>
+                                        <button type="button" class="btn btn-small limit_btn {% if form.cleaned_data.limit == "50" %}btn-primary{% endif %}" type="radio" name="limit" value="50" {% if form.cleaned_data.limit == "50" %}checked{% endif %}/><label for="limit_50">50</label></button>
+                                        <button type="button" class="btn btn-small limit_btn {% if form.cleaned_data.limit == "30" %}btn-primary{% endif %}" type="radio" name="limit" value="30" {% if form.cleaned_data.limit == "30" %}checked{% endif %}/><label for="limit_50">30</label></button>
+                                        <button type="button" class="btn btn-small limit_btn {% if form.cleaned_data.limit == "10" %}btn-primary{% endif %}" type="radio" name="limit" value="10" {% if form.cleaned_data.limit == "10" %}checked{% endif %} /><label for="limit_50">10</label></button>
                                         <input type="hidden" name="limit" value="50">
                                     </div>
                                 </div>

@@ -19,8 +19,6 @@ def rank(request):
     if request.method == 'GET' and request.GET:
         form = RankForm(request.GET)
         if form.is_valid():
-            print "Cleaned data: "
-            print form.cleaned_data
             rank_methods = get_rank_methods(form.cleaned_data)
             filter_methods = get_filter_methods(form.cleaned_data)
             if 'limit' in form.cleaned_data:
