@@ -113,6 +113,11 @@ TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates'),
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+    'django.contrib.auth.context_processors.auth'
+)
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -127,7 +132,6 @@ INSTALLED_APPS = (
     'magicranker.rank',
     'magicranker.stock',
     'magicranker.backend',
-     #'django.contrib.admindocs',
 )
 
 AUTHENTICATION_BACKENDS = (
