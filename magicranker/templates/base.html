@@ -18,9 +18,9 @@
                 <div class="span3">
                     <div class="tabbable tabs-below">
                             <ul class="nav nav-tabs"> 
-                                <li class="active"><a href="/">Home</a></li> 
-                                <li><a href="/info">Info</a></li> 
-                                <li><a href="/contact">Contact</a></li> 
+                                <li class="{% if request.path != '/info' and request.path != '/contact' %}active{% endif %}"><a href="/">Home</a></li> 
+                                <li class="{% if request.path == '/info' %}active{% endif %}"><a href="/info">Info</a></li> 
+                                <li class="{% if request.path == '/contact' %}active{% endif %}"><a href="/contact">Contact</a></li> 
                             </ul>
                     </div>
                 </div>
