@@ -13,11 +13,10 @@
              <th>Rank</th>
              <th>Code</th>
              <th>Name</th>
-             {% if stock.roe %}<th>ROE</th>{% endif %}
-             {% if stock.roe__avg %}<th>ROE Average</th>{% endif %}
-             {% if stock.pe %}<th>PE</th>{% endif %}
-             {% if stock.market_cap %}<th>Market Cap</th>{% endif %}
-             {% if stock.debt_perc %}<th>Debt</th>{% endif %}
+             <th>ROE</th>
+             <th>PE</th>
+             <th>Market Cap</th>
+             <th>Debt</th>
       </tr></thead>
       <tbody>
       {% endif %}
@@ -25,11 +24,10 @@
              <td>{{ forloop.counter }}</td>
              <td>{% if stock.code__code %}<a href='http://au.finance.yahoo.com/q?s={{ stock.code__code }}.AX'>{{ stock.code__code }}</a>{% endif %}</td>
              <td>{% if stock.code__name %}<a href='http://au.finance.yahoo.com/q?s={{ stock.code__name }}.AX'>{{ stock.code__name }}</a>{% endif %}</td>
-             {% if stock.roe %}<td>{{ stock.roe|percentage }}</td>{% endif %}
-             {% if stock.roe__avg %}<td>{{ stock.roe__avg|percentage }}</td>{% endif %}
-             {% if stock.pe %}<td>{{ stock.pe }}</td>{% endif %}
-             {% if stock.market_cap %}<td>{{ stock.market_cap|intword }}</td>{% endif %}
-             {% if stock.debt_perc %}<td>{{ stock.debt_perc }}%</td>{% endif %}
+             <td>{% if stock.roe %}{{ stock.roe|percentage }}{% endif %}</td>
+             <td>{% if stock.pe %}{{ stock.pe }}{% endif %}</td>
+             <td>{% if stock.market_cap %}{{ stock.market_cap|intword }}{% endif %}</td>
+             <td>{% if stock.debt_perc %}{{ stock.debt_perc }}{% endif %}</td>
       </tr>
 {% endfor %}
       </tbody>
