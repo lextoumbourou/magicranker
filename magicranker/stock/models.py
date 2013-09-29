@@ -42,6 +42,8 @@ class PerShare(models.Model):
         null=True, blank=True, max_digits=10, decimal_places=2)
     market_cap = models.BigIntegerField(null=True, blank=True)
     shares_outstanding = models.BigIntegerField(null=True, blank=True)
+    total_debt_ratio = models.DecimalField(
+        null=True, blank=True, max_digits=10, decimal_places=2)
 
     objects = DataFrameManager()
 
@@ -87,6 +89,13 @@ class BalSheet(models.Model):
     other_stockholder_equity = models.BigIntegerField(null=True)
     total_stockholder_equity = models.BigIntegerField(null=True)
     net_tangible_assets = models.BigIntegerField(null=True)
+
+    def _get_total_debt_ratio(self):
+        if self.total_assets and self.total_liabilities:
+            return float(self.total_assets) / self.total_liabilities
+
+    total_debt_ratio = (_get_total_debt_ratio)
+
 
     def __unicode__(self):
         return '{0} {1}'.format(self.code.code, str(self.period_ending))

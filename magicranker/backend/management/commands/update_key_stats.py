@@ -4,8 +4,17 @@ from django.core.mail import send_mail
 from django.core.management.base import BaseCommand, CommandError
 
 from magicranker.backend.scrapers import YahooFinance
-from magicranker.stock.models import Detail, PriceHistory, PerShare
+from magicranker.stock.models import Detail, PriceHistory, PerShare, BalSheet
 
+
+def get_total_debt_ratio(stock, date):
+    data = BalSheet.objects.filter(code=stock).filter(period_ending__lte=date).order_by('period_ending')
+    if data:
+        result = data[0]
+        if None not in (result.total_assets, result.total_liabilities):
+            print result.total_assets, result.total_liabilities
+            print result.total_liabilities / float(result.total_assets)
+            return result.total_liabilities / float(result.total_assets)
 
 class Command(BaseCommand):
     help = 'Get Profile Details from YahooFinance'
@@ -45,7 +54,7 @@ class Command(BaseCommand):
 
             try:
                 per_share = (
-                    PerShare.objects.get(code=stock, date=date))
+                    PerShare.objects.get(code=stock, date=date, year=date.year))
             except PerShare.DoesNotExist:
                 per_share = None
 
@@ -57,12 +66,14 @@ class Command(BaseCommand):
             per_share.book_value = bv
             per_share.pe = pe
             per_share.market_cap = mc
+            per_share.year = date.year
+            per_share.total_debt_ratio = get_total_debt_ratio(stock, date)
             per_share.save()
 
             self.stdout.write(
                 'Updating {0} with {1}, {2}, {3}, {4}, {5}\n'.format(
                     stock.code, eps, roe, bv, pe, mc))
-
+    
     def handle(self, *args, **kwargs):
         stocks = Detail.objects.filter(is_listed=True)
         scrape_count = 0
