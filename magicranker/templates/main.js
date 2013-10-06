@@ -1,14 +1,6 @@
 function click_option(field_name)
 {
     $("#" + field_name + "_set_btn").on('click', '', function() {
-        if ($(this).hasClass('btn-primary'))
-        {
-            $(this).removeClass('btn-primary');
-        }
-        else
-        {
-            $(this).addClass('btn-primary');
-        }
         var rank_input = $("input[name='" + field_name + "']");
         if (rank_input.val() == "1")
         {
@@ -24,8 +16,6 @@ function click_option(field_name)
 function limit_click()
 {
     $(".limit_btn").on('click', '', function() {
-        $(".limit_btn").removeClass('btn-primary');
-        $(this).addClass('btn-primary');
         var rank_input = $("input[name='limit']").val($(this).attr('value'));
     });
 }
