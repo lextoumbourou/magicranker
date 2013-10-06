@@ -25,7 +25,7 @@ def rank(request):
                 limit = int(form.cleaned_data['limit'])
             else:
                 limit = None
-            #data = cache.get(hash(tuple(rank_methods + filter_methods)))
+            data = cache.get(hash(tuple(rank_methods + filter_methods)))
             data = None
             if not data:
                 ranker = Ranker(
@@ -61,23 +61,12 @@ def get_rank_methods(form_data):
             name='pe', 
             min=form_data.get('rank_pe_min', 0),
             max=form_data.get('rank_pe_max')))
-    if form_data.get('rank_martet_cap'):
-        # Market Cap is ordered from highest to lowest
-        output.append(RankMethod(
-            name='market_cap', 
-            min=form_data.get('rank_market_cap_min'),
-            order='market_cap'))
-    if form_data.get('rank_debt'):
-        # Debt is ordered from lowest to highest
-        output.append(RankMethod(
-            name='debt_per', 
-            max=form_data.get('rank_debt_max'),
-            order='-debt_per'))
 
     return output
 
 def get_filter_methods(form_data):
     output = []
+    print form_data
     if 'filter_roe' in form_data:
         # Roe is ordered from highest to lowest
         output.append(FilterMethod(
@@ -95,6 +84,6 @@ def get_filter_methods(form_data):
     if 'filter_debt' in form_data:
         # Debt is ordered from lowest to highest
         output.append(FilterMethod(
-            name='debt_per', max=form_data.get('filter_debt_max')))
+            name='total_debt_ratio', max=form_data.get('filter_debt_max')))
 
     return output

@@ -130,18 +130,19 @@
                                 <div class="title">Debt?</div>
                             </div>
                             <div class="span3">
-                                <button class="btn btn-mini {% if form.cleaned_data.filter_debt_per %}active{% endif %} btn-small" id="filter_debt_set_btn" data-toggle="button" type="button"><span class="icon icon-ok"></span></button>
+                                <button class="btn btn-mini {% if form.cleaned_data.filter_debt %}active{% endif %} btn-small" id="filter_debt_set_btn" data-toggle="button" type="button"><span class="icon icon-ok"></span></button>
+                                <input type="hidden" name="filter_debt" {% if form.cleaned_data.filter_debt %}value="1"{% endif %}>
                             </div>
                         </div>
                     <div class="row-fluid extra-controls">
                         <div class="span12">
                             <label for="">Max
                                  <select name="filter_debt_max">
-                                     <option value="">Any</option> 
-                                     <option value="75">75 %</option> 
-                                     <option value="50">50 %</option> 
-                                     <option value="25">25 %</option> 
-                                     <option value="10">25 %</option> 
+                                     <option value="" {% if form.cleaned_data.filter_debt_max|stringformat:"s" == "" %}selected{% endif %}>Any</option> 
+                                     <option value="0.75" {% if form.cleaned_data.filter_debt_max|stringformat:"s" == "0.75" %}selected{% endif %}>75 %</option> 
+                                     <option value="0.50" {% if form.cleaned_data.filter_debt_max|stringformat:"s" == "0.50" %}selected{% endif %}>50 %</option> 
+                                     <option value="0.25" {% if form.cleaned_data.filter_debt_max|stringformat:"s" == "0.25" %}selected{% endif %}>25 %</option> 
+                                     <option value="0.10" {% if form.cleaned_data.filter_debt_max|stringformat:"s" == "0.10" %}selected{% endif %}>10 %</option> 
                                 </select>
                             </label>
                         </div>	
@@ -167,9 +168,9 @@
                         <div class="row-fluid"> 
                             <div class="span12">
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button type="button" class="btn btn-small limit_btn {% if form.cleaned_data.limit == "50" %}{% endif %}" type="radio" name="limit" value="50" {% if form.cleaned_data.limit == "50" %}checked{% endif %}/><label for="limit_50">50</label></button>
-                                    <button type="button" class="btn btn-small limit_btn {% if form.cleaned_data.limit == "30" %}{% endif %}" type="radio" name="limit" value="30" {% if form.cleaned_data.limit == "30" %}checked{% endif %}/><label for="limit_50">30</label></button>
-                                    <button type="button" class="btn btn-small limit_btn {% if form.cleaned_data.limit == "10" %}{% endif %}" type="radio" name="limit" value="10" {% if form.cleaned_data.limit == "10" %}checked{% endif %} /><label for="limit_50">10</label></button>
+                                    <button type="button" class="btn btn-small limit_btn {% if not form.cleaned_data.limit or form.cleaned_data.limit|stringformat:"s" == "50" %}active{% endif %}" type="radio" name="limit" value="50" {% if form.cleaned_data.limit == "50" %}checked{% endif %}/><label for="limit_50">50</label></button>
+                                    <button type="button" class="btn btn-small limit_btn {% if form.cleaned_data.limit|stringformat:"s" == "30" %}active{% endif %}" type="radio" name="limit" value="30" {% if form.cleaned_data.limit == "30" %}checked{% endif %}/><label for="limit_50">30</label></button>
+                                    <button type="button" class="btn btn-small limit_btn {% if form.cleaned_data.limit|stringformat:"s" == "10" %}active{% endif %}" type="radio" name="limit" value="10" {% if form.cleaned_data.limit == "10" %}checked{% endif %} /><label for="limit_50">10</label></button>
                                     <input type="hidden" name="limit" value="50">
                                 </div>
                             </div>

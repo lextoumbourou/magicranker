@@ -27,7 +27,7 @@
              <td>{% if stock.roe %}{{ stock.roe|percentage }}{% endif %}</td>
              <td>{% if stock.pe %}{{ stock.pe }}{% endif %}</td>
              <td>{% if stock.market_cap %}{{ stock.market_cap|intword }}{% endif %}</td>
-             <td>{% if stock.debt_perc %}{{ stock.debt_perc }}{% endif %}</td>
+             <td>{% if stock.total_debt_ratio %}{{ stock.total_debt_ratio|percentage }}{% endif %}</td>
       </tr>
 {% endfor %}
       </tbody>
