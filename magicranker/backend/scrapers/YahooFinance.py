@@ -3,6 +3,7 @@ import re
 import time
 import logging
 from datetime import datetime
+import HTMLParser
 
 from BeautifulSoup import BeautifulSoup
 import utils
@@ -114,6 +115,7 @@ class YahooFinance():
         Gets the company title and description
         @returns dict
         """
+        h = HTMLParser.HTMLParser()
         # Get the page data
         url = 'http://finance.yahoo.com/q/'
         url += 'pr?s={0}.AX+Profile'.format(self.stock)
@@ -123,7 +125,7 @@ class YahooFinance():
         # Attempt to scrape the title
         data = soup.find('div', 'title')
         try:
-            name = data.h2.string
+            name = h.unescape(data.h2.string)
         except AttributeError:
             logging.info(
                 "Couldn't find a title for {0}".format(self.stock))
