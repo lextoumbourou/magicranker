@@ -38,4 +38,3 @@ change_parent(['rank_roe_max', 'rank_roe_avg'], 'rank_roe');
 change_parent(['rank_pe_min'], 'rank_pe');
 change_parent(['filter_market_cap_min'], 'filter_market_cap');
 change_parent(['filter_debt_max'], 'filter_debt');
-
