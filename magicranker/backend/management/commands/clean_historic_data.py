@@ -6,8 +6,10 @@ class Command(BaseCommand):
         stocks = PerShare.objects.all()
         for stock in stocks:
             if stock.date:
-                stock.year = stock.date.year
-                stock.save()
+                if stock.date.year != stock.year:
+                    print 'Updating ', stock
+                    stock.year = stock.date.year
+                    stock.save()
 
     def handle(self, *args, **kwargs):
         self._update_years()
