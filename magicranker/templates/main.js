@@ -2,13 +2,11 @@ function click_option(field_name)
 {
     $("#" + field_name + "_set_btn").on('click', '', function() {
         var rank_input = $("input[name='" + field_name + "']");
-        if (rank_input.val() == "1")
-        {
-            rank_input.val("0");
-        }
-        else
-        {
+        if (rank_input.val() == "") {
             rank_input.val("1");
+        }
+        else {
+            rank_input.val("");
         }
     });
 }
@@ -24,6 +22,8 @@ function change_parent(elements, parent_elem) {
     for (var i = 0; i < elements.length; i++)
     {
         $('#' + elements[i]).on('click', '', function() {
+            var rank_input = $("input[name='" + parent_elem + "']");
+            rank_input.val("1");
             $('#' + parent_elem + '_set_btn').addClass('active');
         });
     }
