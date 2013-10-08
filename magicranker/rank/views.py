@@ -33,40 +33,42 @@ def rank(request):
                 data = ranker.process()
 
                 cache.set(
-                    hash(tuple(rank_methods + filter_methods)), data,  60*60*24)
+                    hash(tuple(rank_methods + filter_methods)),
+                    data,  60*60*24)
 
             args['rank_results'] = data.iterrows()
-	else:
+        else:
             form = RankForm()
 
         args['form'] = form
 
-    return render_to_response('stock_table.html', 
-                               args,
-                               context_instance=RequestContext(request))
+    return render_to_response(
+        'stock_table.html', args,
+        context_instance=RequestContext(request))
+
 
 def get_rank_methods(form_data):
-    output = [] 
+    output = []
     if form_data.get('rank_roe'):
         # Roe is ordered from highest to lowest
         output.append(RankMethod(
-            name='roe', 
+            name='roe',
             min=form_data.get('rank_roe_min', 0.05),
-            max=form_data.get('rank_roe_max', 0.70), 
-            average=form_data.get('rank_roe_avg', 0), 
+            max=form_data.get('rank_roe_max', 0.70),
+            average=form_data.get('rank_roe_avg', 0),
             ascending=False))
     if form_data.get('rank_pe'):
         # Pe is ordered from lowest to highest
         output.append(RankMethod(
-            name='pe', 
+            name='pe',
             min=form_data.get('rank_pe_min', 0),
             max=form_data.get('rank_pe_max')))
 
     return output
 
+
 def get_filter_methods(form_data):
     output = []
-    print form_data
     if 'filter_roe' in form_data:
         # Roe is ordered from highest to lowest
         output.append(FilterMethod(
