@@ -126,9 +126,10 @@ class YahooFinance():
         data = soup.find('div', 'title')
         try:
             name = h.unescape(data.h2.string)
-        except AttributeError:
+        except (AttributeError, IndexError), error:
             logging.info(
                 "Couldn't find a title for {0}".format(self.stock))
+            logging.error(error)
             name = ''
         name = str(re.sub(r'(\ \(\w\w\w\.\w\w\))', '', name))
 
@@ -137,7 +138,10 @@ class YahooFinance():
             description = soup.findAll('p')[3].string
             if not description:
                 description = ''
-        except AttributeError:
+        except (AttributeError, IndexError), error:
+            logging.info(
+                "Couldn't find a description for {0}".format(self.stock))
+            logging.error(error)
             description = ''
 
         return (self.stock, name, description)
@@ -304,8 +308,8 @@ class YahooFinance():
         return output 
 
 if __name__ == '__main__':
-    for stock in ['ANZ', 'CBA']:
-        y = YahooFinance(stock, save_to_db=False)
+    for stock in ['AAZ', 'CBA']:
+        y = YahooFinance(stock)
         y.get_profile()
         if y.get_current_price():
             y.get_key_stats()
