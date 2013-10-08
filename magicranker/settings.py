@@ -115,7 +115,8 @@ TEMPLATE_DIRS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
-    'django.contrib.auth.context_processors.auth'
+    'django.contrib.auth.context_processors.auth',
+    'magicranker.context_processors.google_analytics'
 )
 
 INSTALLED_APPS = (
@@ -186,3 +187,5 @@ ALLOWED_HOSTS = private.ALLOWED_HOSTS
 BOOTUP_SUPERUSER_NAME = private.SUPERUSER_NAME
 BOOTUP_SUPERUSER_PASSWORD = private.SUPERUSER_PASSWORD
 BOOTUP_SUPERUSER_EMAIL = private.SUPERUSER_EMAIL
+
+GA_TRACKING_ID = private.GA_TRACKING_ID

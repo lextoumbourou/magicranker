@@ -8,7 +8,8 @@ from magicranker.rank.Ranker import RankMethod, FilterMethod, Ranker
 
 
 def main(request):
-    return render_to_response('rank.html', {})
+    return render_to_response(
+        'rank.html', {}, context_instance=RequestContext(request))
 
 
 def rank(request):
