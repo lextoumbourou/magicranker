@@ -84,7 +84,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'djangobower.finders.BowerFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -104,6 +104,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
+
+BOWER_COMPONENTS_ROOT = os.path.join(os.path.dirname(__file__), 'components')
 
 ROOT_URLCONF = private.ROOT_URLCONF
 
@@ -128,6 +130,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.humanize',
+    'djangobower',
     'south',
     'django_pandas',
     'magicranker.rank',
@@ -189,3 +192,8 @@ BOOTUP_SUPERUSER_PASSWORD = private.SUPERUSER_PASSWORD
 BOOTUP_SUPERUSER_EMAIL = private.SUPERUSER_EMAIL
 
 GA_TRACKING_ID = private.GA_TRACKING_ID
+
+BOWER_INSTALLED_APPS = (
+    'jquery#1.10',
+    'bootstrap',
+)

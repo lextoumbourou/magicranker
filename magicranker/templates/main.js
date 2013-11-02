@@ -11,13 +11,6 @@ function click_option(field_name)
     });
 }
 
-function limit_click()
-{
-    $(".limit_btn").on('click', '', function() {
-        var rank_input = $("input[name='limit']").val($(this).attr('value'));
-    });
-}
-
 function change_parent(elements, parent_elem) {
     for (var i = 0; i < elements.length; i++)
     {
@@ -33,7 +26,6 @@ click_option('rank_roe');
 click_option('rank_pe');
 click_option('filter_market_cap');
 click_option('filter_debt');
-limit_click();
 change_parent(['rank_roe_max', 'rank_roe_avg'], 'rank_roe');
 change_parent(['rank_pe_min'], 'rank_pe');
 change_parent(['filter_market_cap_min'], 'filter_market_cap');
