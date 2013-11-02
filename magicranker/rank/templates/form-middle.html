@@ -169,7 +169,7 @@
                             <div class="col-md-12">
                                 <div class="btn-group" data-toggle="buttons">
                                     <label for="limit_50" class="btn btn-default {% if not form.cleaned_data.limit or form.cleaned_data.limit|stringformat:"s" == "50" %}active{% endif %}">
-                                        <input type="radio" name="limit" value="50" id="limit_50" {% if form.cleaned_data.limit == "50" %}checked{% endif %}/>50
+                                        <input type="radio" name="limit" value="50" id="limit_50" {% if not form.cleaned_data.limit or form.cleaned_data.limit == "50" %}checked{% endif %}/>50
                                     </label>
                                     <label for="limit_30" class="btn btn-default {% if form.cleaned_data.limit|stringformat:"s" == "30" %}active{% endif %}">
                                         <input type="radio" name="limit" value="30" id="limit_30" {% if form.cleaned_data.limit == "30" %}checked{% endif %}/>30

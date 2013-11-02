@@ -39,7 +39,7 @@ class RankForm(forms.Form):
 
     # Limit
     limit = forms.ChoiceField(
-        required=False, choices=(('50','50'),('30','30'),('10','10')))
+        required=False, initial='50', choices=(('50','50'),('30','30'),('10','10')))
 
     
 class ContactForm(forms.Form):
