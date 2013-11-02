@@ -1,5 +1,15 @@
+html,
+body {
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
 h1 {
     font-size: 2.0em;
+}
+
+#header {
+    margin-bottom: 20px;
 }
 
 #footer {
@@ -21,8 +31,19 @@ a:hover {
     text-decoration:underline;
 }
 
-#header {
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto;
+    /* Negative indent footer by its height */
+    margin: 0 auto -60px;
+    /* Pad bottom by footer height */
+    padding: 0 0 60px;
+}
 
+/* Set the fixed height of the footer here */
+#footer {
+    height: 60px;
 }
 
 #header h2 {
@@ -62,11 +83,7 @@ h2.subtitle#limit span {
 }
 
 #slogan {
-    border-top: 1px dotted #000;
-    border-bottom: 1px dotted #000;
-    font-size: 1.5em;
-    padding: 4px 5px;
-    margin-bottom: 20px;
+    font-size: 1.3em;
 }
 
 #main-menu {
