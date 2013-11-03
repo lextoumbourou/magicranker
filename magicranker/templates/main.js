@@ -1,11 +1,15 @@
 function click_option(field_name)
 {
     $("#" + field_name + "_set_btn").on('click', '', function() {
+        var extra_controls = $(this).closest('.panel').find('.extra-controls');
+        
         var rank_input = $("input[name='" + field_name + "']");
         if (rank_input.val() == "") {
+            extra_controls.slideDown();
             rank_input.val("1");
         }
         else {
+            extra_controls.slideUp();
             rank_input.val("");
         }
     });

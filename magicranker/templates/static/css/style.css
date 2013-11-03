@@ -4,6 +4,11 @@ body {
     /* The html and body elements cannot have any padding or margin. */
 }
 
+body
+{
+    marg
+}
+
 h1 {
     font-size: 2.0em;
 }
@@ -50,16 +55,19 @@ a:hover {
     color: #000;
 }
 
+.general-controls {
+    margin-bottom: 10px;
+}
+
 h1 small {
     color: #333;
 }
 
 h2.subtitle {
-    border-bottom: 1px solid #000;      
     position: relative;
     font-size: 16px;
     padding-left: 7px;
-    height:25px;
+    height:27px;
 }
 
 h2.subtitle span {
@@ -138,7 +146,6 @@ select {
 .panel {
     background: #e5ecf9;
     padding: 6px 6px 6px 7px;
-    height: 170px;
     margin-top: 10px;
     margin-right: 5px;
     position: relative;
@@ -229,8 +236,12 @@ select {
     padding:10px 30px;
 }
 
-.extra-controls {
+.extra-control-group {
     margin-top: 15px;
+}
+
+.extra-controls-hidden {
+    display: none;
 }
 
 .control-label {
@@ -239,6 +250,11 @@ select {
 
 .method-check {
     text-align: right;
+}
+
+.rank-header {
+    padding-top: 30px;
+    background-color: #ddd;
 }
 
 .tabs-below > .nav-tabs,
