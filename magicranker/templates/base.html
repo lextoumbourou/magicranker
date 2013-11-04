@@ -1,4 +1,5 @@
 {% load static %}
+{% load compress %}
 <!DOCTYPE html>
 <html lang="en"> 
     <head> 
@@ -8,6 +9,16 @@
         <meta name="author" content=""> 
         <link rel="stylesheet" href='{% static 'bootstrap/dist/css/bootstrap.min.css' %}' />
         <link rel="stylesheet" href='{% static 'bootstrap/dist/css/bootstrap-theme.min.css' %}' />
+        {% if debug %}
+        <link rel="stylesheet/less" type="text/css" media="all" href="{% static 'less/theme.less' %}" />
+        <link rel="stylesheet/less" type="text/css" media="all" href="{% static 'less/bs3-stacked-tabs.less' %}" />
+        <script src="{% static 'js/less-1.5.0.min.js' %}"></script>
+        {% else %}
+        {% compress css %}
+        <link rel="stylesheet" type="text/less" media="all" href="{% static 'less/theme.less' %}" />
+        <link rel="stylesheet" type="text/less" media="all" href="{% static 'less/bs3-stacked-tabs.less' %}" />
+        {% endcompress %}
+        {% endif %}
         <!-- Load my CSS file --> 
         <link rel="stylesheet" href="/static/css/style.css"> 
     </head> 

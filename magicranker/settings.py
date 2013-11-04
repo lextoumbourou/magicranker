@@ -77,6 +77,7 @@ ADMIN_MEDIA_PREFIX = '/static/admin/'
 # Additional locations of static files
 STATICFILES_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates/static/'),
+    os.path.join(os.path.dirname(__file__), 'assets/'),
 )
 
 # List of finder classes that know how to find static files in
@@ -84,6 +85,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
     'djangobower.finders.BowerFinder',
 )
 
@@ -131,6 +133,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.humanize',
     'djangobower',
+    'compressor',
     'south',
     'django_pandas',
     'magicranker.rank',
@@ -196,4 +199,9 @@ GA_TRACKING_ID = private.GA_TRACKING_ID
 BOWER_INSTALLED_APPS = (
     'jquery#1.10',
     'bootstrap',
+    'less',
+)
+
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
 )
