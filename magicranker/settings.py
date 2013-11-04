@@ -107,7 +107,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-BOWER_COMPONENTS_ROOT = os.path.join(os.path.dirname(__file__), 'components')
+BOWER_COMPONENTS_ROOT = os.path.join(os.path.dirname(__file__), 'assets')
 
 ROOT_URLCONF = private.ROOT_URLCONF
 
