@@ -200,6 +200,7 @@ BOWER_INSTALLED_APPS = (
     'jquery#1.10',
     'bootstrap',
     'less',
+    'angular#1.0.8',
 )
 
 COMPRESS_PRECOMPILERS = (
