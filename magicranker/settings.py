@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'south',
     'django_pandas',
     'magicranker.rank',
+    'magicranker.api',
     'magicranker.stock',
     'magicranker.backend',
 )

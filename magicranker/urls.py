@@ -9,5 +9,6 @@ urlpatterns = patterns('',
     url(r'^info/?', TemplateView.as_view(template_name='info.html')),
     url(r'^contact/?', TemplateView.as_view(template_name='contact.html')),
     url(r'^rank/?', 'magicranker.rank.views.rank'),
+    url(r'^api/?', include('magicranker.api.urls')),
     url(r'^$', 'magicranker.rank.views.main'),
 )
