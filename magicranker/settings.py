@@ -203,7 +203,6 @@ BOWER_INSTALLED_APPS = (
     'less',
     'angular#1.2.0-rc.3',
     'angular-bootstrap',
-    'angular-percentage-filter',
 )
 
 COMPRESS_PRECOMPILERS = (
