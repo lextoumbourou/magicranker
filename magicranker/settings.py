@@ -208,3 +208,10 @@ BOWER_INSTALLED_APPS = (
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'lessc {infile} {outfile}'),
 )
+
+COMPRESS_PRECOMPILERS = (
+            ('text/less', 'lessc {infile} {outfile}'),
+            )
+
+COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
