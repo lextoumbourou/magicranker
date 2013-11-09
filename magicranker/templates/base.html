@@ -1,7 +1,7 @@
 {% load static %}
 {% load compress %}
 <!DOCTYPE html>
-<html ng-app> 
+<html ng-app="rankerApp"> 
     <head> 
         <title>Magic Ranker - an ASX implementation of the Magic Formula</title> 
         <meta http-equiv="content-type" content="text/html; charset=utf-8"> 
@@ -9,7 +9,10 @@
         <meta name="author" content=""> 
         <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}" />
         <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap-theme.min.css' %}" />
-        <script src="{% static 'angular/angular.min.js' %}"></script>
+        <script type='text/javascript' src='{% static 'jquery/jquery.js' %}'></script>
+        <script type="text/javascript" src="{% static 'angular/angular.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'angular-bootstrap/ui-bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'js/main.js' %}"></script> 
         {% if debug %}
         <link rel="stylesheet/less" type="text/css" media="all" href="{% static 'less/theme.less' %}" />
         <link rel="stylesheet/less" type="text/css" media="all" href="{% static 'less/bs3-stacked-tabs.less' %}" />
@@ -54,9 +57,7 @@
                     <p>Site by <a href="http://www.lextoumbourou.com">Lex Toumbourou</a>.</p>
             </div> 
         </footer> 
-        <script type='text/javascript' src='{% static 'jquery/jquery.js' %}'></script>
         <script type='text/javascript' src='{% static 'bootstrap/dist/js/bootstrap.min.js' %}'></script>
-        <script type="text/javascript" src="{% static 'js/main.js' %}"></script> 
         <script>
             {% include 'ga.html' %}
         </script>

@@ -45,5 +45,5 @@ def rank(request):
         args['form'] = form
 
     return render_to_response(
-        'stock_table.html', args,
+        'rank.html', args,
         context_instance=RequestContext(request))

@@ -32,7 +32,7 @@ class RankForm(forms.Form):
 
     filter_market_cap = forms.BooleanField(required=False)
     filter_market_cap_min = forms.IntegerField(
-        min_value=0, max_value=1000000000, initial=0)
+        min_value=0, max_value=1000000000, initial=0, required=False)
         
     filter_debt = forms.BooleanField(required=False)
     filter_debt_max = forms.DecimalField(required=False)

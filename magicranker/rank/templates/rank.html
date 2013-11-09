@@ -1,35 +1,32 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="row">
+{% verbatim %}
+    <div class="row" ng-controller="RankChoicesCtrl">
         <div class="col-md-2 method-controls-section">
+        {% endverbatim %}
                 {% include 'form-middle.html' %}
+{% verbatim %}
             </div>
 	    <div class="col-md-10">
                 <div class="row general-controls">
                     <div class="col-xs-2">
-                        <button name="main_submit" type="submit" class="btn btn-default btn-sm">
+                        <a href="#" name="main_submit" class="btn btn-default btn-sm" ng-click="getRank()">
                               <span class="glyphicon glyphicon-repeat"></span>
-                          </button>
+                          </a>
                     </div>
                     <div class="col-xs-offset-8 col-xs-2">
-                        <div class="btn-group" data-toggle="buttons">
-                            <label for="limit_50" class="btn btn-sm btn-default {% if not form.cleaned_data.limit or form.cleaned_data.limit|stringformat:"s" == "50" %}active{% endif %}">
-                                <input type="radio" name="limit" value="50" id="limit_50" {% if not form.cleaned_data.limit or form.cleaned_data.limit == "50" %}checked{% endif %}/>50
-                            </label>
-                            <label for="limit_30" class="btn btn-sm btn-default {% if form.cleaned_data.limit|stringformat:"s" == "30" %}active{% endif %}">
-                                <input type="radio" name="limit" value="30" id="limit_30" {% if form.cleaned_data.limit == "30" %}checked{% endif %}/>30
-                            </label>
-                            <label for="limit_10" class="btn btn-sm btn-default {% if form.cleaned_data.limit|stringformat:"s" == "10" %}active{% endif %}">
-                                <input type="radio" name="limit" value="10" id="limit_10" {% if form.cleaned_data.limit == "10" %}checked{% endif %}/>10
-                            </label>
-                        </div>
+                        <input type="radio" name="limit" ng-model="limit" ng-change="setLimit(50)" value="50"> 50
+                        <input type="radio" name="limit" ng-model="limit" ng-change="setLimit(30)" value="30"> 30
+                        <input type="radio" name="limit" ng-model="limit" ng-change="setLimit(10)" value="10"> 10
                     </div>
                 </div>
                 </form>
-	    	{% block result %}
+        {% endverbatim %}
+                {% include 'stock_table.html' %}
+        {% verbatim %}
 	    </div>
 	</div>
 
-{% endblock %}
+{% endverbatim %}
 {% endblock %}

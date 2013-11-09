@@ -39,17 +39,17 @@ class Ranker():
         # based on the highest average value requested
         highest = 1
         for method in self.rank_methods + self.filter_methods:
-            if method.average and method.average > highest:
-                highest = method.average
+            if 'average' in method and method['average']['changeable'] and method['average'] > highest:
+                highest = method['average']['value']
                 # If they have requested the values to be averaged,
                 # we'll do the filtering after pulling from the db
                 continue
-            if method.min:
-                filter = method.name + '__gte'
-                results = results.filter(**{filter: method.min})
-            if method.max:
-                filter = method.name + '__lte'
-                results = results.filter(**{filter: method.max})
+            if 'min' in method and method['min']['changeable'] and method['min']['value']:
+                filter = method['name'] + '__gte'
+                results = results.filter(**{filter: method['min']['value']})
+            if 'max' in method and method['max']['changeable'] and method['max']['value']:
+                filter = method['name'] + '__lte'
+                results = results.filter(**{filter: method['max']['value']})
 
         period_starts = today - relativedelta(years=highest)
         results = results.filter(
@@ -76,18 +76,18 @@ class Ranker():
         # Create the ranks and do the filtering on averaged values
         for method in self.rank_methods:
             # Average if requested
-            if method.average and method.average > 1:
-                this_years_data[method.name] = (
-                    data[method.name].astype(float).groupby(data.index).mean())
+            if 'average' in method and method['average']['changeable'] and method['average'] > 1:
+                this_years_data[method['name']] = (
+                    data[method['name']].astype(float).groupby(data.index).mean())
                 # Filter on the averages
-                if method.min:
+                if 'min' in method and method['min']['changeable']:
                     this_years_data = this_years_data[
-                        this_years_data[method.name] > method.min]
-                if method.max:
+                        this_years_data[method['name']] > method['min']['value']]
+                if 'max' in method and method['max']['changeable']:
                     this_years_data = this_years_data[
-                        this_years_data[method.name] < method.max]
+                        this_years_data[method['name']] < method['max']['value']]
 
             this_years_data['total_rank'] += (
-                this_years_data[method.name].rank(ascending=method.ascending))
+                this_years_data[method['name']].rank(ascending=method['ascending']))
 
         return this_years_data.sort(['total_rank', 'code__code'])[:self.limit]

@@ -1,36 +1,98 @@
-function click_option(field_name)
-{
-    $("#" + field_name + "_set_btn").on('click', '', function() {
-        var extra_controls = $(this).closest('.panel').find('.extra-controls');
-        
-        var rank_input = $("input[name='" + field_name + "']");
-        if (rank_input.val() == "") {
-            extra_controls.slideDown();
-            rank_input.val("1");
-        }
-        else {
-            extra_controls.slideUp();
-            rank_input.val("");
-        }
-    });
-}
+'use strict';
 
-function change_parent(elements, parent_elem) {
-    for (var i = 0; i < elements.length; i++)
-    {
-        $('#' + elements[i]).on('click', '', function() {
-            var rank_input = $("input[name='" + parent_elem + "']");
-            rank_input.val("1");
-            $('#' + parent_elem + '_set_btn').addClass('active');
+angular.module('percentage', [])
+    
+var rankerApp = angular.module('rankerApp', []);
+rankerApp.filter('percentage', function () {
+    return function (input) {
+        if (input === null) {
+            return '';
+        }
+        var rounded = Math.round(input*10000)/100;
+        if (rounded == NaN) {
+            return '';
+        }
+        var percentage = '' + rounded + '%';
+        return percentage;
+    };
+});
+
+rankerApp.filter('millions', function() {
+    return function (input) {
+        if (input === null) {
+            return '';
+        }
+        var mills = input / 1000000;
+        if (mills == NaN) {
+            return '';
+        }
+        mills = Math.round(mills * 100) / 100;
+        return '' + mills + ' M'
+    }
+});
+
+rankerApp.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';    }
+]);
+
+rankerApp.factory('RankMethods', ['$http', function($http) {
+    var apiUrl = '/api/get_all_controls'
+    var myData;
+    return {
+        getMethods: $http.get(apiUrl)
+    };
+}]);
+
+
+
+rankerApp.controller('RankChoicesCtrl', function RankChoicesCtrl($scope, $http, RankMethods) {
+    $scope.stocks = null;
+    $scope.loading = false;
+    $scope.limit = 50;
+
+    RankMethods.getMethods.success(function(data) {
+        $scope.rankMethods = data.rank_methods;
+        $scope.filterMethods = data.filter_methods;
+    });
+
+    $scope.selectMethod = function(method) {
+        if (!method.is_selected) {
+            method.is_selected = true;
+        } else {
+            method.is_selected = false;
+        }
+        $scope.getRank();
+    }
+
+    $scope.changeMethod = function(method) {
+        if (!method.is_selected) {
+            method.is_selected = true;
+        }
+        $scope.getRank();
+    }
+
+    $scope.setLimit = function(num) {
+        console.log("HELLO");
+        $scope.limit = num;
+        if ($scope.stocks) {
+            $scope.getRank();
+        }
+    }
+
+    $scope.getRank = function() {
+        var url = '/api/rank/'
+        $scope.loading = true;
+        var data = {
+            'rank_methods': $scope.rankMethods,
+            'filter_methods': $scope.filterMethods,
+            'limit': $scope.limit
+        }
+        console.log(data);
+        $http.post(url, data).success(function(data) {
+            $scope.stocks = data;
+            $scope.loading = false;
         });
     }
-}
 
-click_option('rank_roe');
-click_option('rank_pe');
-click_option('filter_market_cap');
-click_option('filter_debt');
-change_parent(['rank_roe_max', 'rank_roe_avg'], 'rank_roe');
-change_parent(['rank_pe_min'], 'rank_pe');
-change_parent(['filter_market_cap_min'], 'filter_market_cap');
-change_parent(['filter_debt_max'], 'filter_debt');
+});
