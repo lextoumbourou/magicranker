@@ -1,6 +1,6 @@
-{% verbatim %}
 <form role="form" action="/rank" method="GET" id="myform">
-
+{% csrf_token %}
+{% verbatim %}
 <div class="controls" ng-init="init()">
 
     <div class="row" > <!-- Rank Section -->
