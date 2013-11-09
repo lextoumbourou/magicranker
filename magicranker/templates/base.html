@@ -25,31 +25,31 @@
         {% endif %}
     </head> 
     <body>
-        <div class="container">
         <div id="wrap">
-            <div id="header" class="row">
-                <div class="col-md-9">
-                    <div class="row">
-                        <h1>
-                            <a href="/" alt="MagicRanker"><img src="/static/images/Title.gif"></a><small>An ASX-ranking system based on the <a href="http://www.magicformulainvesting.com/welcome.html">Magic Formula</a>.</small>
-                        </h1>
+            <div class="container">
+                <div id="header" class="row">
+                    <div class="col-md-9">
+                        <div class="row">
+                            <h1>
+                                <a href="/" alt="MagicRanker"><img src="/static/images/Title.gif"></a><small>An ASX-ranking system based on the <a href="http://www.magicformulainvesting.com/welcome.html">Magic Formula</a>.</small>
+                            </h1>
+                        </div>
+                        <div class="row">
+                            <span id="slogan">
+                        </div>
                     </div>
-                    <div class="row">
-                        <span id="slogan">
+                    <div class="col-md-3">
+                        <div class="tabbable tabs-below">
+                                <ul class="nav nav-tabs"> 
+                                    <li class="{% if request.path != '/info' and request.path != '/contact' %}active{% endif %}"><a href="/">Home</a></li> 
+                                    <li class="{% if request.path == '/info' %}active{% endif %}"><a href="/info">Info</a></li> 
+                                </ul>
+                        </div>
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="tabbable tabs-below">
-                            <ul class="nav nav-tabs"> 
-                                <li class="{% if request.path != '/info' and request.path != '/contact' %}active{% endif %}"><a href="/">Home</a></li> 
-                                <li class="{% if request.path == '/info' %}active{% endif %}"><a href="/info">Info</a></li> 
-                            </ul>
-                    </div>
-                </div>
+                {% block content %}
+                {% endblock %}
             </div>
-            {% block content %}
-            {% endblock %}
-        </div>
         </div>
         <footer id="footer">
             <div class="container">
