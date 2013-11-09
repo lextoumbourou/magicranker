@@ -213,5 +213,6 @@ COMPRESS_PRECOMPILERS = (
             ('text/less', 'lessc {infile} {outfile}'),
             )
 
-COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = True
+if not is_dev:
+    COMPRESS_ENABLED = True
+    COMPRESS_OFFLINE = True
