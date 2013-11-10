@@ -1,0 +1,33 @@
+########
+# ANZ
+########
+-   fields: {name: 'Australia New Zealand Bank', code: 'ANZ', desc: null, first_listed: 2013-06-19, is_listed: true, last_listed: 2013-06-20,
+        name: null}
+    model: stock.detail
+    pk: 215
+-   fields: {date: "2012-07-01", close: "1.00", code: 215, volume: 1965000}
+    model: stock.pricehistory
+    pk: 2000
+-   fields: {date: "2012-08-01", close: "2.00", code: 215, volume: 1965000}
+    model: stock.pricehistory
+    pk: 2001
+-   fields: {date: "2012-09-01", close: "3.00", code: 215, volume: 1965000}
+    model: stock.pricehistory
+    pk: 2002
+
+########
+# CBA
+########
+-   fields: {code: 'CBA', desc: null, first_listed: 2013-06-19, is_listed: true, last_listed: 2013-06-20,
+        name: null}
+    model: stock.detail
+    pk: 315
+-   fields: {date: "2012-07-01", close: "1.00", code: 315, volume: 1965000}
+    model: stock.pricehistory
+    pk: 3000
+-   fields: {date: "2012-08-01", close: "2.00", code: 315, volume: 1965000}
+    model: stock.pricehistory
+    pk: 3001
+-   fields: {date: "2012-09-01", close: "3.00", code: 315, volume: 1965000}
+    model: stock.pricehistory
+    pk: 3002
