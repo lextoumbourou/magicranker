@@ -17,3 +17,5 @@ class StockTest(TestCase):
         price_data = get_price_data(stocks, start, end)
 
         self.assertIsInstance(price_data, pd.core.frame.DataFrame)
+        self.assertTrue(
+            price_data[price_data.index == 'ANZ']['date'][0] == start.date())

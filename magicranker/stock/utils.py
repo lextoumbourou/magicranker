@@ -13,5 +13,7 @@ def get_price_data(stocks, start_date, end_date):
     """
     data = PriceHistory.objects.filter(
         code__code__in=stocks, date__gte=start_date, date__lte=end_date)
+    fields = [f.name for f in PriceHistory._meta.fields[1:]]
 
-    return data.to_dataframe(index='code', coerce_float=True)
+    return data.to_dataframe(
+        'code__code', *fields, index='code__code', coerce_float=True)
