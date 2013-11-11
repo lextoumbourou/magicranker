@@ -1,4 +1,6 @@
 import urllib2
+import datetime as dt
+import csv
 import re
 import time
 import logging
@@ -6,6 +8,7 @@ from datetime import datetime
 import HTMLParser
 
 from BeautifulSoup import BeautifulSoup
+import requests
 import utils
 
 
@@ -307,9 +310,24 @@ class YahooFinance():
         output.update(self._get_all_liabilities(trs))
         return output 
 
+    def get_price_history(self):
+        """Return the price history for the company as a list of lists"""
+        today = dt.datetime.today()
+        url = (
+            'http://ichart.finance.yahoo.com/'
+            'table.csv?s={0}.AX&a=00&b=1&c=1900'
+            '&d={1}&e={2}&f={3}&g=d&ignore=.csv').format(
+                self.stock, today.day, today.month, today.year)
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            return csv.reader(response.content.split('\n'), delimiter=',')
+
+
 if __name__ == '__main__':
-    for stock in ['AAZ', 'CBA']:
+    for stock in ['ANZ', 'CBA']:
         y = YahooFinance(stock)
         y.get_profile()
         if y.get_current_price():
             y.get_key_stats()
+        print [r for r in y.get_price_history()]
