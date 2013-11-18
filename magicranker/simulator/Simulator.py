@@ -47,7 +47,7 @@ class Simulator(object):
         buys = {}
         parcel_price = float(self.size) / len(columns)
         for column in columns:
-            buys[column] = Decimal(parcel_price) / first_row[column][0]
+            buys[column] = Decimal(parcel_price) / Decimal(first_row[column][0])
 
         return buys
 
