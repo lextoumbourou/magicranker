@@ -10,12 +10,16 @@
             </div>
 	    <div class="col-md-10">
                 <div class="row general-controls">
-                    <div class="col-xs-2">
-                        <a href="#" name="main_submit" class="btn btn-default btn-sm" ng-click="getRank()">
+                    <div class="col-xs-1">
+                        <a href="#" name="main_submit" class="btn btn-default btn-sm" ng-click="evalQuery()">
                               <span class="glyphicon glyphicon-repeat"></span>
                           </a>
                     </div>
-                    <div class="col-xs-offset-8 col-xs-2">
+                    <div class="col-xs-2">
+                        <a href="#" ng-class="{active: display == 'list'}" class="btn btn-default" ng-click="setDisplay('list')">List</a>
+                        <a href="#" ng-class="{active: display == 'test'}" class="btn btn-default" ng-click="setDisplay('test')">Test</a>
+                    </div>
+                    <div class="col-xs-offset-7 col-xs-2">
                         <input type="radio" name="limit" ng-model="limit" ng-change="setLimit(50)" value="50"> 50
                         <input type="radio" name="limit" ng-model="limit" ng-change="setLimit(30)" value="30"> 30
                         <input type="radio" name="limit" ng-model="limit" ng-change="setLimit(10)" value="10"> 10

@@ -10,31 +10,44 @@
        </div>
 {% verbatim %}
   <div>
-       <table class="table table-striped" ng-show="stocks">
-            <thead>
-                <tr>
-                 <th>Rank</th>
-                 <th>Code</th>
-                 <th>Name</th>
-                 <th>ROE</th>
-                 <th>PE</th>
-                 <th>Market Cap</th>
-                 <th>Debt</th>
-          </tr></thead>
-          <tbody>
-          
-          <tr ng-repeat="stock in stocks">
-                 <td>{{ $index + 1 }}</td>
-                 <td><a href='http://au.finance.yahoo.com/q?s={{ stock.code__code }}.AX'>{{ stock.code__code }}</a></td>
-                 <td><a href='http://au.finance.yahoo.com/q?s={{ stock.code__name }}.AX'>{{ stock.code__name }}</a></td>
-                 <td>{{ stock.roe | percentage }}</td>
-                 <td>{{ stock.pe }}</td>
-                 <td>{{ stock.market_cap | millions }}</td>
-                 <td>{{ stock.total_debt_ratio | percentage }}</td>
-          </tr>
-          </div>
-          </tbody>
-        </table>
+       <div ng-show="checkDisplay('list')">
+           <table class="table table-striped" ng-show="stocks">
+                <thead>
+                    <tr>
+                     <th>Rank</th>
+                     <th>Code</th>
+                     <th>Name</th>
+                     <th>ROE</th>
+                     <th>PE</th>
+                     <th>Market Cap</th>
+                     <th>Debt</th>
+              </tr></thead>
+              <tbody>
+              
+              <tr ng-repeat="stock in stocks">
+                     <td>{{ $index + 1 }}</td>
+                     <td><a href='http://au.finance.yahoo.com/q?s={{ stock.code__code }}.AX'>{{ stock.code__code }}</a></td>
+                     <td><a href='http://au.finance.yahoo.com/q?s={{ stock.code__name }}.AX'>{{ stock.code__name }}</a></td>
+                     <td>{{ stock.roe | percentage }}</td>
+                     <td>{{ stock.pe }}</td>
+                     <td>{{ stock.market_cap | millions }}</td>
+                     <td>{{ stock.total_debt_ratio | percentage }}</td>
+              </tr>
+              </div>
+              </tbody>
+            </table>
+        </div>
+        <div ng-show="checkDisplay('test')">
+            <div class="row well test-menu">
+                <div class="col-xs-2">
+                    <input type="checkbox"> Normalise
+                </div>
+            </div>
+            <div class="row">
+                <div id="graph-container" >
+                </div>
+            </div>
+        </div>
       </div>
       </div>
 </div>

@@ -48,13 +48,28 @@ rankerApp.factory('RankMethods', ['$http', function($http) {
 
 rankerApp.controller('RankChoicesCtrl', function RankChoicesCtrl($scope, $http, RankMethods) {
     $scope.stocks = null;
+    $scope.testData = null;
     $scope.loading = false;
     $scope.limit = 50;
+    $scope.display = 'list';
 
     RankMethods.getMethods.success(function(data) {
         $scope.rankMethods = data.rank_methods;
         $scope.filterMethods = data.filter_methods;
     });
+
+    $scope.setDisplay = function(display) {
+        $scope.display = display;
+        $scope.evalQuery();
+    };
+
+    $scope.checkDisplay = function(display) {
+        return $scope.display == display;
+    };
+
+    $scope.isList = function() {
+        return $scope.display == 'list';
+    };
 
     $scope.selectMethod = function(method) {
         if (!method.is_selected) {
@@ -62,21 +77,28 @@ rankerApp.controller('RankChoicesCtrl', function RankChoicesCtrl($scope, $http, 
         } else {
             method.is_selected = false;
         }
-        $scope.getRank();
-    }
+        $scope.evalQuery();
+    };
 
     $scope.changeMethod = function(method) {
         if (!method.is_selected) {
             method.is_selected = true;
         }
-        $scope.getRank();
+        $scope.evalQuery();
     }
 
     $scope.setLimit = function(num) {
-        console.log("HELLO");
         $scope.limit = num;
         if ($scope.stocks) {
+            $scope.evalQuery();
+        }
+    }
+
+    $scope.evalQuery = function() {
+        if ($scope.display == 'list') {
             $scope.getRank();
+        } else if ($scope.display == 'test') {
+            $scope.getSimulation();
         }
     }
 
@@ -88,11 +110,44 @@ rankerApp.controller('RankChoicesCtrl', function RankChoicesCtrl($scope, $http, 
             'filter_methods': $scope.filterMethods,
             'limit': $scope.limit
         }
-        console.log(data);
         $http.post(url, data).success(function(data) {
+            $scope.testData = null;
             $scope.stocks = data;
             $scope.loading = false;
         });
+    }
+
+    $scope.getSimulation = function() {
+        var url = '/api/simulate_rank/'
+        $scope.loading = true;
+        var data = {
+            'rank_methods': $scope.rankMethods,
+            'filter_methods': $scope.filterMethods,
+            'limit': $scope.limit
+        }
+        $http.post(url, data).success(function(data) {
+            $scope.stocks = null;
+            $scope.testData = data;
+            $scope.loading = false;
+            $scope.results = [];
+            for (var i = 0; i < data.index.length; i++) {
+                $scope.results.push([data.index[i] / 1000000, data.data[i]]);
+            }
+            $('#graph-container').highcharts('StockChart', {
+                rangeSelector : {
+                    selected : 1
+                },
+
+                series : [{
+                    name : 'Portfolio Value',
+                    data : $scope.results,
+                    tooltip: {
+                        valueDecimals: 2
+                    }
+                }]
+            });
+        });
+
     }
 
 });

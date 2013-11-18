@@ -38,7 +38,7 @@
                                 <label for="rank_row_max" class="control-label">Max</label>
                             </div>
                             <div class="col-xs-8  col-xs-offset-1">
-                                <select class="form-control" ng-change="getRank(method)" ng-model="method.max.value" ng-options="choice.value as choice.display for choice in method.max.choices">
+                                <select class="form-control" ng-change="evalQuery(method)" ng-model="method.max.value" ng-options="choice.value as choice.display for choice in method.max.choices">
                                     <option value=""></option>
                                 </select>
                             </div>
@@ -49,7 +49,7 @@
                                 <label for="rank_row_avg" class="control-label">Min</label>
                             </div>
                             <div class="col-xs-8 col-xs-offset-1">
-                                <select class="form-control" ng-change="getRank(method)"  ng-model="method.min.value" ng-options="choice.value as choice.display for choice in method.min.choices">
+                                <select class="form-control" ng-change="evalQuery(method)"  ng-model="method.min.value" ng-options="choice.value as choice.display for choice in method.min.choices">
                                 </select>
                             </div>
                         </div>
@@ -59,7 +59,7 @@
                                 <label for="rank_row_avg" class="control-label">Avg</label>
                             </div>
                             <div class="col-xs-8 col-xs-offset-1">
-                                <select class="form-control" ng-change="getRank(method)"  ng-model="method.average.value" ng-options="choice.value as choice.display for choice in method.average.choices">
+                                <select class="form-control" ng-change="evalQuery(method)"  ng-model="method.average.value" ng-options="choice.value as choice.display for choice in method.average.choices">
                                 </select>
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                                 <label for="rank_row_max" class="control-label">Max</label>
                             </div>
                             <div class="col-xs-8  col-xs-offset-1">
-                                <select class="form-control" ng-change="getRank(method)" ng-model="method.max.value" ng-options="choice.value as choice.display for choice in method.max.choices">
+                                <select class="form-control" ng-change="evalQuery(method)" ng-model="method.max.value" ng-options="choice.value as choice.display for choice in method.max.choices">
                                 </select>
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                                 <label for="rank_row_avg" class="control-label">Min</label>
                             </div>
                             <div class="col-xs-8 col-xs-offset-1">
-                                <select class="form-control" ng-change="getRank(method)"  ng-model="method.min.value" ng-options="choice.value as choice.display for choice in method.min.choices">
+                                <select class="form-control" ng-change="evalQuery(method)"  ng-model="method.min.value" ng-options="choice.value as choice.display for choice in method.min.choices">
                                 </select>
                             </div>
                        </div>
