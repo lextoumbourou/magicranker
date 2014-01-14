@@ -13,6 +13,7 @@ class Detail(models.Model):
     first_listed = models.DateField(null=True)
     last_listed = models.DateField(null=True)
     is_listed = models.BooleanField()
+    is_aggregate = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['code']
