@@ -5,6 +5,8 @@ import re
 import time
 import logging
 from datetime import datetime
+from urllib import urlencode
+
 import HTMLParser
 
 from BeautifulSoup import BeautifulSoup
@@ -313,11 +315,18 @@ class YahooFinance():
     def get_price_history(self):
         """Return the price history for the company as a list of lists"""
         today = dt.datetime.today()
+
+        if self.stock.startswith('^'):
+            stock = self.stock
+        else:
+            stock = self.stock + '.AX'
+
         url = (
             'http://ichart.finance.yahoo.com/'
-            'table.csv?s={0}.AX&a=00&b=1&c=1900'
+            'table.csv?s={0}&a=00&b=1&c=1900'
             '&d={1}&e={2}&f={3}&g=d&ignore=.csv').format(
                 self.stock, today.day, today.month, today.year)
+        print url
         response = requests.get(url)
 
         if response.status_code == 200:
@@ -325,7 +334,7 @@ class YahooFinance():
 
 
 if __name__ == '__main__':
-    for stock in ['ANZ', 'CBA']:
+    for stock in ['^AXJO', 'ANZ', 'CBA']:
         y = YahooFinance(stock)
         y.get_profile()
         if y.get_current_price():
