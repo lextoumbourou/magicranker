@@ -28,13 +28,24 @@ def simulate_rank(request):
         data = get_rank_results(request)
         end = dt.datetime.today().date()
         start = end - dt.timedelta(days=365)
+        portfolio_size = 1000000
 
-        sim = Simulator(1000000)
+        sim = Simulator(portfolio_size)
         sim.build_price_data(list(data.code__code.values), start, end)
         sim.run()
 
-        return HttpResponse(sim.total.to_json(
-            orient='split', double_precision=3), mimetype='application/json')
+        # To do: cache the fuck out of this!
+        asx200 = Simulator(portfolio_size)
+        asx200.build_price_data(['^AXJO'], start, end)
+        asx200.run()
+
+        output = {}
+        output['simulation'] = json.loads(sim.total.to_json(
+            orient='split', double_precision=3))
+        output['asx200'] = json.loads(asx200.total.to_json(
+            orient='split', double_precision=3))
+
+        return HttpResponse(json.dumps(output), mimetype='application/json')
 
 
 def get_all_controls(request):

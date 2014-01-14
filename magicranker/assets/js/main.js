@@ -126,25 +126,40 @@ rankerApp.controller('RankChoicesCtrl', function RankChoicesCtrl($scope, $http, 
             'limit': $scope.limit
         }
         $http.post(url, data).success(function(data) {
+            console.log(data);
             $scope.stocks = null;
             $scope.testData = data;
             $scope.loading = false;
-            $scope.results = [];
-            for (var i = 0; i < data.index.length; i++) {
-                $scope.results.push([data.index[i] / 1000000, data.data[i]]);
+            $scope.simulation_results = [];
+            $scope.asx200_results = [];
+            for (var i = 0; i < data.simulation.index.length; i++) {
+                $scope.simulation_results.push([data.simulation.index[i] / 1000000, data.simulation.data[i]]);
             }
+            for (var i = 0; i < data.asx200.index.length; i++) {
+                $scope.asx200_results.push([data.asx200.index[i] / 1000000, data.asx200.data[i]]);
+            }
+
             $('#graph-container').highcharts('StockChart', {
                 rangeSelector : {
                     selected : 1
                 },
 
-                series : [{
-                    name : 'Portfolio Value',
-                    data : $scope.results,
-                    tooltip: {
-                        valueDecimals: 2
+                series : [
+                    {
+                        name : 'Portfolio Value',
+                        data : $scope.simulation_results,
+                        tooltip: {
+                            valueDecimals: 2
+                        },
+                    },
+                    {
+                        name : 'ASX 200 Value',
+                        data : $scope.asx200_results,
+                        tooltip: {
+                            valueDecimals: 2
+                        },
                     }
-                }]
+                ]
             });
         });
 
