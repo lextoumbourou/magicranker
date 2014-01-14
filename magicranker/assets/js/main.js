@@ -44,8 +44,6 @@ rankerApp.factory('RankMethods', ['$http', function($http) {
     };
 }]);
 
-
-
 rankerApp.controller('RankChoicesCtrl', function RankChoicesCtrl($scope, $http, RankMethods) {
     $scope.stocks = null;
     $scope.loading = false;
@@ -73,7 +71,6 @@ rankerApp.controller('RankChoicesCtrl', function RankChoicesCtrl($scope, $http, 
     }
 
     $scope.setLimit = function(num) {
-        console.log("HELLO");
         $scope.limit = num;
         if ($scope.stocks) {
             $scope.getRank();
@@ -88,11 +85,9 @@ rankerApp.controller('RankChoicesCtrl', function RankChoicesCtrl($scope, $http, 
             'filter_methods': $scope.filterMethods,
             'limit': $scope.limit
         }
-        console.log(data);
         $http.post(url, data).success(function(data) {
             $scope.stocks = data;
             $scope.loading = false;
         });
     }
-
 });
