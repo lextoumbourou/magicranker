@@ -1,0 +1,24 @@
+{
+  "name": "magicranker",
+  "version": "1.0.0",
+  "authors": [
+    "Lex Toumbourou <lextoumbourou@gmail.com>"
+  ],
+  "description": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.1.0",
+    "jquery": "git://github.com/jquery/jquery.git#~2.1.0",
+    "html5shiv": "~3.7.0",
+    "respond": "~1.4.2",
+    "angular": "~1.2.16"
+  }
+}

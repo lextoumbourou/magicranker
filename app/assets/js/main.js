@@ -37,7 +37,7 @@ rankerApp.config(['$httpProvider', function($httpProvider) {
 ]);
 
 rankerApp.factory('RankMethods', ['$http', function($http) {
-    var apiUrl = '/api/get_all_controls'
+    var apiUrl = '/api/v1/get_controls'
     var myData;
     return {
         getMethods: $http.get(apiUrl)
