@@ -1,34 +1,39 @@
-from decimal import Decimal
-
 from .. import db
 from . import CRUDMixin
 
-class Detail(models.Model):
+
+class Detail(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(5), nullable=False, unique=True)
     name = db.Column(db.String(100), nullable=False)
-    desc = db.Column(db.String(), nullable=False, blank=True)
+    desc = db.Column(db.String(), nullable=False)
     first_listed = db.Column(db.DateTime)
     last_listed = db.Column(db.DateTime)
     is_listed = db.Column(db.Integer)
 
-class Sector(models.Model):
+
+class Sector(db.Model, CRUDMixin):
+    id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(60))
 
-class PerShare(models.Model):
+
+class PerShare(db.Model, CRUDMixin):
+    id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime)
-    earnings = db.Column(db.Float(asdecimal=True)
+    earnings = db.Column(db.Float(asdecimal=True))
     roe = db.Column(db.Float(asdecimal=True))
-    book_value = db.Column(db.Float(asdecimal=True)
+    book_value = db.Column(db.Float(asdecimal=True))
     pe = db.Column(db.Float(asdecimal=True))
     market_cap = db.Column(db.BigInteger)
     shares_outstanding = db.Column(db.BigInteger)
-    total_debt_ratio = db.Column(db.Float(asdecimal=True)
+    total_debt_ratio = db.Column(db.Float(asdecimal=True))
 
     code_id = db.Column(db.Integer, db.ForeignKey('detail.id'))
     code = db.relationship('Detail', backref=db.backref('pershares'))
 
-class BalSheet(models.Model):
+
+class BalSheet(db.Model, CRUDMixin):
+    id = db.Column(db.Integer, primary_key=True)
     period_ending = db.Column(db.DateTime)
     cash_and_cash_equivalents = db.Column(db.BigInteger)
     short_term_investments = db.Column(db.BigInteger)
@@ -76,9 +81,10 @@ class BalSheet(models.Model):
     total_debt_ratio = (_get_total_debt_ratio)
 
 
-class PriceHistory(models.Model):
+class PriceHistory(db.Model, CRUDMixin):
+    id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.DateTime)
-    close = db.Column(db.Float(asdecimal=True)
+    close = db.Column(db.Float(asdecimal=True))
     volume = db.Column(db.BigInteger)
 
     code_id = db.Column(db.Integer, db.ForeignKey('detail.id'))

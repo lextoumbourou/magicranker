@@ -26,4 +26,5 @@ class CRUDMixin(object):
         return commit and db.session.commit()
 
 # Import models from the various model files
-# from .<submodule> import <model>  # noqa
+from .stock import (
+    Detail, Sector, PerShare, BalSheet, PriceHistory) # noqa
