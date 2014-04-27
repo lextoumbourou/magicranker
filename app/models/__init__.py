@@ -27,4 +27,4 @@ class CRUDMixin(object):
 
 # Import models from the various model files
 from .stock import (
-    Detail, Sector, PerShare, BalSheet, PriceHistory) # noqa
+    Stock, Sector, PerShare, BalSheet, PriceHistory) # noqa

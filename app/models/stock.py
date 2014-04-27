@@ -2,7 +2,7 @@ from .. import db
 from . import CRUDMixin
 
 
-class Detail(db.Model, CRUDMixin):
+class Stock(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String(5), nullable=False, unique=True)
     name = db.Column(db.String(100), nullable=False)
