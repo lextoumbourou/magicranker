@@ -11,6 +11,8 @@ class Stock(db.Model, CRUDMixin):
     last_listed = db.Column(db.DateTime)
     is_listed = db.Column(db.Integer)
 
+    def __repr__(self):
+        return '<Stock {}>'.format(self.code)
 
 class Sector(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,6 +21,8 @@ class Sector(db.Model, CRUDMixin):
 
 class PerShare(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
+    stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
+
     date = db.Column(db.DateTime)
     earnings = db.Column(db.Float(asdecimal=True))
     roe = db.Column(db.Float(asdecimal=True))
@@ -28,12 +32,16 @@ class PerShare(db.Model, CRUDMixin):
     shares_outstanding = db.Column(db.BigInteger)
     total_debt_ratio = db.Column(db.Float(asdecimal=True))
 
-    code_id = db.Column(db.Integer, db.ForeignKey('detail.id'))
-    code = db.relationship('Detail', backref=db.backref('pershares'))
+    stock = db.relationship('Stock', backref=db.backref('per_share'))
+
+    def __repr__(self):
+        return '<PerShare {} {}>'.format(self.stock.code, self.date)
 
 
 class BalSheet(db.Model, CRUDMixin):
     id = db.Column(db.Integer, primary_key=True)
+    stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
+
     period_ending = db.Column(db.DateTime)
     cash_and_cash_equivalents = db.Column(db.BigInteger)
     short_term_investments = db.Column(db.BigInteger)
@@ -71,14 +79,16 @@ class BalSheet(db.Model, CRUDMixin):
     total_stockholder_equity = db.Column(db.BigInteger)
     net_tangible_assets = db.Column(db.BigInteger)
 
-    code_id = db.Column(db.Integer, db.ForeignKey('detail.id'))
-    code = db.relationship('Detail', backref=db.backref('pricehistorys'))
+    stock = db.relationship('Stock', backref=db.backref('bal_sheet'))
 
     def _get_total_debt_ratio(self):
         if self.total_assets and self.total_liabilities:
             return float(self.total_assets) / self.total_liabilities
 
     total_debt_ratio = (_get_total_debt_ratio)
+
+    def __repr__(self):
+        return '<BalSheet {}>'.format(self.stock.code)
 
 
 class PriceHistory(db.Model, CRUDMixin):
@@ -87,5 +97,8 @@ class PriceHistory(db.Model, CRUDMixin):
     close = db.Column(db.Float(asdecimal=True))
     volume = db.Column(db.BigInteger)
 
-    code_id = db.Column(db.Integer, db.ForeignKey('detail.id'))
-    code = db.relationship('Detail', backref=db.backref('pricehistorys'))
+    stock_id = db.Column(db.Integer, db.ForeignKey('stock.id'))
+    stock = db.relationship('Stock', backref=db.backref('price_history'))
+
+    def __repr__(self):
+        return '<PriceHistory {}>'.format(self.stock.code)
