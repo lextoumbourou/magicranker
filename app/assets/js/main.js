@@ -78,7 +78,7 @@ rankerApp.controller('RankChoicesCtrl', function RankChoicesCtrl($scope, $http, 
     }
 
     $scope.getRank = function() {
-        var url = '/api/v1/rank/'
+        var url = '/api/v1/rank'
         $scope.loading = true;
         var data = {
             'rank_methods': $scope.rankMethods,
