@@ -21,7 +21,21 @@ Codebase for the MagicRanker project. Visit https://www.magicranker.com to see i
 > createuser -U postgres magicranker
 ```
 
-3. Run webserver
+3. Run migrations to ensure database is up-to-date
+
+```
+> python manage.py db upgrade 
+```
+
+4. Populate database with historical data
+
+```
+> cd data
+> gzip -d data-dump-2014-04-27.sql.gz
+> psql -U postgres magicranker -f data-dump-2014-04-27.sql
+```
+
+5. Run webserver
 
 ```
 > python manage.py runserver
