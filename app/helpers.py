@@ -76,11 +76,11 @@ def process_methods(data):
     filter_methods = []
 
     for method in data['rank_methods']:
-        if 'changeable' in method and method['changeable']:
+        if 'is_selected' in method and method['is_selected']:
             rank_methods.append(filter_method_dict(method))
 
     for method in data['filter_methods']:
-        if 'changeable' in method and method['changeable']:
+        if 'is_selected' in method and method['is_selected']:
             filter_methods.append(filter_method_dict(method))
 
     limit = int(data['limit'])
@@ -88,12 +88,12 @@ def process_methods(data):
     return rank_methods, filter_methods, limit
 
 def filter_method_dict(method):
-    output = {}
-    if 'max' in method:
+    output = {'name': method['name']}
+    if 'max' in method and method['max']['value']:
         output['max'] = method['max']['value']
-    if 'min' in method:
-        output['min'] = method['min']['value']
+    if 'min' in method and method['min']['value']:
+        output['min'] = method['min'].get('value')
     if 'average' in method:
-        output['average'] = method['average']['value']
+        output['average'] = method['average'].get('value')
 
     return output
