@@ -163,8 +163,8 @@
 
             <tr ng-repeat="stock in stocks">
               <td>{{ $index + 1 }}</td>
-              <td><a href='http://au.finance.yahoo.com/q?s={{ stock.code__code }}.AX'>{{ stock.code__code }}</a></td>
-              <td><a href='http://au.finance.yahoo.com/q?s={{ stock.code__name }}.AX'>{{ stock.code__name }}</a></td>
+              <td><a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.code }}</a></td>
+              <td><a href='http://au.finance.yahoo.com/q?s={{ stock.code }}.AX'>{{ stock.name }}</a></td>
               <td>{{ stock.roe | percentage }}</td>
               <td>{{ stock.pe }}</td>
               <td>{{ stock.market_cap | millions }}</td>
