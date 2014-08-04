@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'compressor',
     'south',
     'django_pandas',
+    'raven.contrib.django.raven_compat',
     'magicranker.rank',
     'magicranker.api',
     'magicranker.stock',
@@ -212,6 +213,8 @@ COMPRESS_PRECOMPILERS = (
 COMPRESS_PRECOMPILERS = (
             ('text/less', 'lessc {infile} {outfile}'),
             )
+
+RAVEN_CONFIG = {'dsn': private.RAVEN_DSN}
 
 if not is_dev:
     COMPRESS_ENABLED = True
