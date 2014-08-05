@@ -64,7 +64,7 @@ class Ranker():
         # Convert data to a Pandas dataframe for easy processing.
         # This is the slowest step in the process
         data = results.to_dataframe(
-            fieldnames=fields, index='code', coerce_float=True)
+            fieldnames=fields, index='code', coerce_float=True, verbose=False)
 
         ## Just get this years data
         this_years_data = data[data.year == today.year]
