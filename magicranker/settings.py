@@ -210,10 +210,10 @@ COMPRESS_PRECOMPILERS = (
 )
 
 COMPRESS_PRECOMPILERS = (
-RAVEN_CONFIG = {'dsn': private.RAVEN_DSN}
     ('text/less', 'lessc {infile} {outfile}'),
 )
 
 if not is_dev:
+    RAVEN_CONFIG = {'dsn': private.RAVEN_DSN}
     COMPRESS_ENABLED = True
     COMPRESS_OFFLINE = True
