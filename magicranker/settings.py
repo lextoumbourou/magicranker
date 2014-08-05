@@ -20,7 +20,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': private.DB_ENGINE,
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': private.DB_NAME,
     }
 }
