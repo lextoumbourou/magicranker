@@ -76,7 +76,6 @@ ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-    os.path.join(os.path.dirname(__file__), 'templates/static/'),
     os.path.join(os.path.dirname(__file__), 'assets/'),
 )
 
