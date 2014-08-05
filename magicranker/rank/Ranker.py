@@ -59,13 +59,12 @@ class Ranker():
 
         # Create a list of fields in model to use as arguments
         # (there might be a better way to do this)
-        fields = [f.name for f in PerShare._meta.fields[1:]]
+        fields = ['code__name', 'code__code'] + [f.name for f in PerShare._meta.fields[1:]]
 
         # Convert data to a Pandas dataframe for easy processing.
         # This is the slowest step in the process
         data = results.to_dataframe(
-            'code__name', 'code__code',
-            *fields, index='code', coerce_float=True)
+            fieldnames=fields, index='code', coerce_float=True)
 
         ## Just get this years data
         this_years_data = data[data.year == today.year]
