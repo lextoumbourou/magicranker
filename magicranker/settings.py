@@ -34,7 +34,7 @@ else:
     DATABASES['default']['USER'] = private.PROD_DB_USER
     DATABASES['default']['PASSWORD'] = private.PROD_DB_PASS
 
-TIME_ZONE = private.TIME_ZONE 
+TIME_ZONE = private.TIME_ZONE
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -183,8 +183,8 @@ LOGGING = {
 }
 
 EMAIL_HOST = private.EMAIL_HOST
-EMAIL_PORT = private.EMAIL_PORT 
-DEFAULT_FROM_EMAIL = private.DEFAULT_FROM_EMAIL 
+EMAIL_PORT = private.EMAIL_PORT
+DEFAULT_FROM_EMAIL = private.DEFAULT_FROM_EMAIL
 
 INTERNAL_IPS = ('127.0.0.1',)
 
@@ -210,10 +210,9 @@ COMPRESS_PRECOMPILERS = (
 )
 
 COMPRESS_PRECOMPILERS = (
-            ('text/less', 'lessc {infile} {outfile}'),
-            )
-
 RAVEN_CONFIG = {'dsn': private.RAVEN_DSN}
+    ('text/less', 'lessc {infile} {outfile}'),
+)
 
 if not is_dev:
     COMPRESS_ENABLED = True
