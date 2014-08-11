@@ -74,7 +74,3 @@ class Command(BaseCommand):
             message += '{0} unlisted companies'.format(unlisted_count)
         else:
             message = 'Failed to run\n'
-
-        send_mail(
-            title, message, 'reports@magicranker.com',
-            ['lextoumbourou@gmail.com'], fail_silently = False)
