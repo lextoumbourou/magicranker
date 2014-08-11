@@ -85,10 +85,3 @@ class Command(BaseCommand):
             if self._update_latest_price(stock, date, yf):
                 self._update_key_stats(stock, date, yf)
                 scrape_count += 1
-
-        title = 'Report: key stats complete ({0})'.format(
-                datetime.now())
-        message = '{0} companies updated'.format(scrape_count)
-        send_mail(
-            title, message, 'reports@magicranker.com',
-            ['lextoumbourou@gmail.com'], fail_silently = False)
