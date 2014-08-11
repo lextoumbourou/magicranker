@@ -28,8 +28,7 @@ class Command(BaseCommand):
         # Add stock_list to the db if they aren't there already
         if stocks:
             for stock in stocks:
-                print stock
-                stock, created = Detail.objects.get_or_create(code=stock)
+                stock, created = Detail.objects.get_or_create(code=stock, defaults={'is_listed': True})
                 if created:
                     new_count += 1;
                     stock.first_listed = today
