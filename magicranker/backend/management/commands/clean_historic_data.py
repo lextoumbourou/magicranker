@@ -1,5 +1,7 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
+
 from magicranker.stock.models import PerShare
+
 
 class Command(BaseCommand):
     def _update_years(self):

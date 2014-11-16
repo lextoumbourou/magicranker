@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import logging
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from magicranker.backend.scrapers import asx
 from magicranker.stock.models import Detail
@@ -21,18 +21,19 @@ class Command(BaseCommand):
         # Get today's date
         today = datetime.today()
 
-        new_count = 0;
-        update_count = 0;
+        new_count = 0
+        update_count = 0
 
         # Add stock_list to the db if they aren't there already
         if stocks:
             for stock in stocks:
-                stock, created = Detail.objects.get_or_create(code=stock, defaults={'is_listed': True})
+                stock, created = Detail.objects.get_or_create(
+                    code=stock, defaults={'is_listed': True})
                 if created:
-                    new_count += 1;
+                    new_count += 1
                     stock.first_listed = today
                 else:
-                    update_count += 1;
+                    update_count += 1
 
                 stock.is_listed = True
                 stock.last_listed = today
@@ -59,9 +60,6 @@ class Command(BaseCommand):
         return unlisted_count
 
     def handle(self, *args, **kwargs):
-        title = 'Report: stock list complete ({0})'.format(
-                datetime.now())
-
         results = self._get_full_stock_list()
 
         if results:

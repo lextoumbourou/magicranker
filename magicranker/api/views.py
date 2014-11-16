@@ -5,19 +5,24 @@ from django.core.cache import cache
 from django.http import HttpResponse
 
 from magicranker.rank.Ranker import Ranker
-from magicranker.rank import forms as rank_forms, utils as rank_utils
 
 
 def rank(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        rank_methods = [method for method in data['rank_methods'] if method['is_selected']]
-        filter_methods = [method for method in data['filter_methods'] if method['is_selected']]
+
+        rank_methods = [
+            method for method in data['rank_methods']
+            if method['is_selected']]
+        filter_methods = [
+            method for method in data['filter_methods']
+            if method['is_selected']]
 
         if 'limit' in data:
             limit = int(data['limit'])
         else:
             limit = 50
+
         data = cache.get(hash(request.body))
         if not data:
             ranker = Ranker(

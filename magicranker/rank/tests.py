@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.db.models.query import * 
 
 from magicranker.rank.Ranker import Ranker
 

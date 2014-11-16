@@ -1,6 +1,4 @@
-from datetime import datetime, timedelta
-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from magicranker.backend.scrapers import YahooFinance
 from magicranker.stock.models import Detail
@@ -29,12 +27,3 @@ class Command(BaseCommand):
             stock.desc = description
             stock.save()
             update_count += 1
-
-        title = 'Report: update profile details complete ({0})'.format(
-                datetime.now())
-
-        message = '{0} companies updated'.format(update_count)
-
-        send_mail(
-            title, message, 'reports@magicranker.com',
-            ['lextoumbourou@gmail.com'], fail_silently = False)

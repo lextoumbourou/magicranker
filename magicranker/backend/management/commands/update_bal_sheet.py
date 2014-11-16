@@ -1,6 +1,4 @@
-from datetime import datetime
-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from magicranker.backend.scrapers import YahooFinance
 from magicranker.stock.models import BalSheet, Detail
@@ -20,9 +18,9 @@ class Command(BaseCommand):
 
             if 'period_ending' in data:
                 dates = data['period_ending']
-            
+
             for count, date in enumerate(dates):
-                if date is None:
+                if not date:
                     continue
 
                 print "Stock is ", stock
@@ -36,5 +34,5 @@ class Command(BaseCommand):
                         code=stock, period_ending=date)
 
                     result = data[key][count]
-                    setattr(obj, key, result) 
+                    setattr(obj, key, result)
                     obj.save()

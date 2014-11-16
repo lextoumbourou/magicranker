@@ -1,12 +1,13 @@
 import time
 from datetime import datetime
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.core.mail import send_mail
 
 from magicranker.backend.scrapers.ETrade import ETrade
 from magicranker.stock.models import Detail, PerShare
 import magicranker._private as private
+
 
 class Command(BaseCommand):
     def add_to_db(self, stock, data):
@@ -15,7 +16,8 @@ class Command(BaseCommand):
             kwargs['code'] = stock
             kwargs['date'] = data['periods'][count]
             try:
-                kwargs['shares_outstanding'] = float(data['shares_out'][count]) * 1000000
+                kwargs['shares_outstanding'] = float(
+                    data['shares_out'][count]) * 1000000
             except IndexError:
                 kwargs['shares_outstanding'] = None
             try:
@@ -42,8 +44,6 @@ class Command(BaseCommand):
             # check if the record exists
             try:
                 obj = PerShare.objects.get(code=stock, date=kwargs['date'])
-                print 'Already exists for ', stock
-                print 'Updating'
                 obj.roe = kwargs['roe']
                 obj.shares_outstanding = kwargs['shares_outstanding']
                 obj.book_value = kwargs['book_value']
@@ -51,8 +51,6 @@ class Command(BaseCommand):
                 obj.pe = kwargs['pe']
                 obj.save()
             except PerShare.DoesNotExist:
-                print 'Adding record for ', stock
-                print kwargs
                 obj = PerShare(**kwargs)
                 obj.save()
 
@@ -81,5 +79,4 @@ class Command(BaseCommand):
         message += '{0} companies failed to update\n'.format(error_count)
         send_mail(
             title, message, 'reports@magicranker.com',
-            ['lextoumbourou@gmail.com'], fail_silently = False)
-
+            ['lextoumbourou@gmail.com'], fail_silently=False)

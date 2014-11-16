@@ -1,9 +1,5 @@
-import sys
-import os
 import urllib
-import urllib2
 import re
-import ssl
 import StringIO
 
 import pycurl
@@ -51,7 +47,7 @@ class ETrade():
         curl.perform()
         if curl.getinfo(pycurl.HTTP_CODE) == '200':
             print 'Login successful'
-            c.close()
+            curl.close()
 
     def _get_page(self, stock):
         url = 'https://invest.etrade.com.au/QuotesAndResearch/Shares/'
@@ -132,7 +128,7 @@ class ETrade():
 
             data['periods'] = self._get_dates(trs)
             data['roe'] = self._get_values(trs, 'Return on equity (%)')
-            
+
             # Get 3rd last table (should have Per Share stats in it)
             try:
                 trs = soup.findAll('table', rules='all')[-2].findAll('tr')
