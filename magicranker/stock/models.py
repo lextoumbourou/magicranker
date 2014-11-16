@@ -1,12 +1,11 @@
-from decimal import Decimal
-
-from django.contrib import admin
-from django.contrib.auth.models import User
 from django.db import models
 from django_pandas.managers import DataFrameManager
 
 
 class Detail(models.Model):
+
+    """Store core information about listed companies."""
+
     code = models.CharField(max_length=5, unique=True)
     name = models.CharField(max_length=100, null=True, blank=True)
     desc = models.TextField(null=True, blank=True)
@@ -22,6 +21,9 @@ class Detail(models.Model):
 
 
 class Sector(models.Model):
+
+    """Provide sectors for categorizing companies."""
+
     category = models.CharField(max_length=60)
 
     def __unicode__(self):
@@ -29,6 +31,9 @@ class Sector(models.Model):
 
 
 class PerShare(models.Model):
+
+    """Per share metrics for listed companies."""
+
     code = models.ForeignKey(Detail)
     date = models.DateField(null=True)
     year = models.IntegerField()
@@ -52,6 +57,9 @@ class PerShare(models.Model):
 
 
 class BalSheet(models.Model):
+
+    """Store balance sheet metrics for listed companies."""
+
     code = models.ForeignKey(Detail)
     period_ending = models.DateField(null=True)
     cash_and_cash_equivalents = models.BigIntegerField(null=True)
@@ -96,12 +104,14 @@ class BalSheet(models.Model):
 
     total_debt_ratio = (_get_total_debt_ratio)
 
-
     def __unicode__(self):
         return '{0} {1}'.format(self.code.code, str(self.period_ending))
 
 
 class PriceHistory(models.Model):
+
+    """Historical price history for listed companies."""
+
     code = models.ForeignKey(Detail)
     date = models.DateField()
     close = models.DecimalField(max_digits=5, decimal_places=2)

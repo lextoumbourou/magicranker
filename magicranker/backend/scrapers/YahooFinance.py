@@ -1,4 +1,3 @@
-import urllib2
 import re
 import time
 import logging
@@ -208,8 +207,8 @@ class YahooFinance():
         except (ValueError, IndexError):
             bvps = None
 
-        return (self.stock, eps, roe, 
-                bvps, pe, market_cap,)
+        return (self.stock, eps, roe,
+                bvps, pe, market_cap)
 
     def _get_all_assets(self, trs):
         """
@@ -233,7 +232,7 @@ class YahooFinance():
                 output[title] = []
                 output[title] = get_list_from_row(trs[10])
 
-                ## Total of the total assets
+                # Total of the total assets
                 title = get_title_from_top_row(trs[19])
                 output[title] = []
                 output[title] = get_list_from_row(trs[19])
@@ -305,7 +304,7 @@ class YahooFinance():
                    .findAll('tr'))
         output.update(self._get_all_assets(trs))
         output.update(self._get_all_liabilities(trs))
-        return output 
+        return output
 
 if __name__ == '__main__':
     for stock in ['AAZ', 'CBA']:

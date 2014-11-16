@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'django_pandas',
     'raven.contrib.django.raven_compat',
     'magicranker.rank',
+    'magicranker.home',
     'magicranker.api',
     'magicranker.stock',
     'magicranker.backend',

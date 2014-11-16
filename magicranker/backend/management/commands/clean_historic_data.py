@@ -13,5 +13,3 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         self._update_years()
-
-

@@ -1,42 +1,138 @@
 {
-"rank_methods":
-    [
+    "filter_methods": [
         {
-            "human_name": "Return On Equity",
-            "name": "roe",
+            "human_name": "Market Cap",
+            "is_selected": false,
+            "max": {
+                "changeable": false,
+                "value": false
+            },
+            "min": {
+                "changeable": true,
+                "choices": [
+                    {
+                        "display": "0",
+                        "value": 0
+                    },
+                    {
+                        "display": "250 M",
+                        "value": 250000000
+                    },
+                    {
+                        "display": "500 M",
+                        "value": 500000000
+                    },
+                    {
+                        "display": "1 B",
+                        "value": 1000000000
+                    }
+                ],
+                "type": "select",
+                "value": 0
+            },
+            "name": "market_cap"
+        },
+        {
+            "human_name": "Debt",
             "is_selected": false,
             "max": {
                 "changeable": true,
-                "value": 0.70,
-                "type" : "select",
                 "choices": [
-                    {"value": 1.0, "display": "100%"},
-                    {"value": 0.70, "display": "70%"},
-                    {"value": 0.50, "display": "50%"},
-                    {"value": 0.30, "display": "30%"}
-                ]
+                    {
+                        "display": "Any",
+                        "value": false
+                    },
+                    {
+                        "display": "75 %",
+                        "value": 0.75
+                    },
+                    {
+                        "display": "50 %",
+                        "value": 0.5
+                    },
+                    {
+                        "display": "25 %",
+                        "value": 0.25
+                    }
+                ],
+                "type": "select",
+                "value": false
+            },
+            "min": {
+                "changeable": false,
+                "value": false
+            },
+            "name": "total_debt_ratio"
+        }
+    ],
+    "rank_methods": [
+        {
+            "ascending": false,
+            "average": {
+                "changeable": true,
+                "choices": [
+                    {
+                        "display": "1 yrs",
+                        "value": 1
+                    },
+                    {
+                        "display": "2 yrs",
+                        "value": 2
+                    },
+                    {
+                        "display": "3 yrs",
+                        "value": 3
+                    },
+                    {
+                        "display": "5 yrs",
+                        "value": 5
+                    },
+                    {
+                        "display": "10 yrs",
+                        "value": 10
+                    }
+                ],
+                "type": "select",
+                "value": 1
+            },
+            "human_name": "Return On Equity",
+            "is_selected": false,
+            "max": {
+                "changeable": true,
+                "choices": [
+                    {
+                        "display": "100%",
+                        "value": 1.0
+                    },
+                    {
+                        "display": "70%",
+                        "value": 0.7
+                    },
+                    {
+                        "display": "50%",
+                        "value": 0.5
+                    },
+                    {
+                        "display": "30%",
+                        "value": 0.3
+                    }
+                ],
+                "type": "select",
+                "value": 0.7
             },
             "min": {
                 "changeable": false,
                 "valuealue": false
             },
-            "average": {
-                "changeable": true,
-                "value": 1,
-                "type" : "select",
-                "choices": [
-                    {"value": 1, "display": "1 yrs"},
-                    {"value": 2, "display": "2 yrs"},
-                    {"value": 3, "display": "3 yrs"},
-                    {"value": 5, "display": "5 yrs"},
-                    {"value": 10, "display": "10 yrs"}
-                ]
-            },
-            "ascending": false
+            "name": "roe"
         },
         {
+            "ascending": true,
+            "average": {
+                "changeable": false,
+                "value": false
+            },
             "human_name": "Price to Earnings",
-            "name": "pe",
             "is_selected": false,
             "max": {
                 "changeable": false,
@@ -44,65 +140,32 @@
             },
             "min": {
                 "changeable": true,
-                "value": 0,
-                "type" : "select",
                 "choices": [
-                    {"value": 0, "display": "0"},
-                    {"value": 2, "display": "2"},
-                    {"value": 3, "display": "3"},
-                    {"value": 5, "display": "5"},
-                    {"value": 10, "display": "10"}
-                ]
+                    {
+                        "display": "0",
+                        "value": 0
+                    },
+                    {
+                        "display": "2",
+                        "value": 2
+                    },
+                    {
+                        "display": "3",
+                        "value": 3
+                    },
+                    {
+                        "display": "5",
+                        "value": 5
+                    },
+                    {
+                        "display": "10",
+                        "value": 10
+                    }
+                ],
+                "type": "select",
+                "value": 0
             },
-            "average": {
-                "changeable": false,
-                "value": false
-            },
-            "ascending": true
-        }
-    ],
-"filter_methods":
-    [
-        {
-            "human_name": "Market Cap",
-            "name": "market_cap",
-            "is_selected": false,
-            "max": {
-                "changeable": false,
-                "value": false
-            },
-            "min": {
-                "changeable": true,
-                "value": 0,
-                "type" : "select",
-                "choices": [
-                    {"value": 0, "display": "0"},
-                    {"value": 250000000, "display": "250 M"},
-                    {"value": 500000000, "display": "500 M"},
-                    {"value": 1000000000, "display": "1 B"}
-                ]
-            }
-        },
-        {
-            "human_name": "Debt",
-            "name": "total_debt_ratio",
-            "is_selected": false,
-            "max": {
-                "changeable": true,
-                "value": false,
-                "type" : "select",
-                "choices": [
-                    {"value": false, "display": "Any"},
-                    {"value": 0.75, "display": "75 %"},
-                    {"value": 0.50, "display": "50 %"},
-                    {"value": 0.25, "display": "25 %"}
-                ]
-            },
-            "min": {
-                "changeable": false,
-                "value": false
-            }
+            "name": "pe"
         }
     ]
 }
-

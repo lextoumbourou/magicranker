@@ -1,9 +1,7 @@
 from django.test import TestCase
 from django.db.models.query import * 
-from datetime import datetime
 
-from magicranker.stock.models import PerShare, Detail
-from magicranker.rank.Ranker import *
+from magicranker.rank.Ranker import Ranker
 
 
 class RankerTest(TestCase):
