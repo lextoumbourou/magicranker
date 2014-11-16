@@ -1,0 +1,1 @@
+flake8 magicranker --exclude=magicranker/stock/migrations/*py
