@@ -47,6 +47,7 @@ Getting Started
 * Create database and user.
 
 ::
+
     > createuser -W magicranker
     Password:
     > createdb magicranker
