@@ -5,30 +5,86 @@ MagicRanker is an open-source stock marking ranking and filtering tool based on 
 
 You can view it in action at `MagicRanker.com <http://MagicRanker.com>`_.
 
+Dependancies
+------------
+
+Postgres (> 9.3)
+^^^^^^^^^^^^^^^^
+
+Ubuntu 14
+``````````
+
+Postgres can be installed on Ubuntu 14 as follows:
+
+::
+
+     sudo apt-get install postgresql-9.3
+
+OSX
+````
+
+I recommend using `Postgres.app <http://postgresapp.com/>`_: "Just download, drag to the applications folder, and double-click"
+
+Windows
+```````
+
+Dunno. LOL. Pull request me up if you figure it out.
+
+
+Node tools
+^^^^^^^^^^
+
+Less is required for compiling CSS and Bower for installing static files.
+
+::
+
+    npm install -g bower less
+
+
 Getting Started
 ---------------
 
-1. Clone repo.
+* Create database and user.
+
+::
+    > createuser -W magicranker
+    Password:
+    > createdb magicranker
+
+* **Coming soon** Download nightly data dump and load into DB.
+
+* Clone repo.
 
 ::
   
     git clone git@github.com:lextoumbourou/magicranker.com.git
 
-2. Prepare a `virtualenv <http://virtualenv.readthedocs.org/en/latest/>`_.
+* Prepare a `virtualenv <http://virtualenv.readthedocs.org/en/latest/>`_.
 
 ::
 
     cd magicranker.com && virtualenv env
 
-3. Install requirements.
+* Install Python requirements.
 
 ::
 
     pip install -r requirements.txt
 
+* Install Bower deps.
+
+::
+
+    python manage.py bower install
+
+* Run webserver.
+
+::
+
+     python manage.py runserver
 
 Running tests
---------------
+-------------
 
 ::
 
