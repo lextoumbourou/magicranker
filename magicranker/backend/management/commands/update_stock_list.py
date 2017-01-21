@@ -24,23 +24,21 @@ class Command(BaseCommand):
         new_count = 0
         update_count = 0
 
-        # Add stock_list to the db if they aren't there already
-        if stocks:
-            for stock in stocks:
-                stock, created = Detail.objects.get_or_create(
-                    code=stock, defaults={'is_listed': True})
-                if created:
-                    new_count += 1
-                    stock.first_listed = today
-                else:
-                    update_count += 1
+        for stock in stocks:
+            stock, created = Detail.objects.update_or_create(
+                code=stock.code, defaults=dict(
+                    name=stock.name, category=stock.category, is_listed=True))
+            if created:
+                new_count += 1
+                stock.first_listed = today
+            else:
+                update_count += 1
 
-                stock.is_listed = True
-                stock.last_listed = today
-                stock.save()
-        else:
-            return False
-            logging.error('Failed to download stock list')
+            stock.is_listed = True
+            stock.last_listed = today
+            stock.save()
+
+            self.stdout.write('Updated {0}.\n'.format(stock))
 
         return new_count, update_count
 

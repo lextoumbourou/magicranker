@@ -2,30 +2,37 @@ import re
 import csv
 from StringIO import StringIO
 
-import utils
+import attr
+import requests
 
 
-def get_full_stock_list():
+@attr.attrs
+class StockData(object):
+
+    name = attr.attrib()
+    code = attr.attrib()
+    category = attr.attrib()
+
+
+def get_full_stock_list(req=None):
     """
     Gets the full list of stocks from ASX
     """
-    stock_list = []
-    asx_companies = utils.get_page(
+    req = req or requests
+    r = requests.get(
         'http://www.asx.com.au/asx/research/ASXListedCompanies.csv')
-    if asx_companies:
-        csvfile = csv.reader(StringIO(asx_companies), delimiter=',')
-        for row in csvfile:
-            # Skip the rows without CSV data
-            if len(row) <= 1:
-                continue
-            # Check if CSV is a 3-letter stock code
-            if re.search(r'^\w\w\w$', row[1]):
-                stock_list.append(row[1])
-            else:
-                pass
-        return stock_list
-    else:
-        return None
+    asx_companies = r.text
+
+    csvfile = csv.reader(StringIO(asx_companies), delimiter=',')
+
+    for row in csvfile:
+        # Skip the rows without CSV data
+        if len(row) <= 1:
+            continue
+
+        yield StockData(name=row[0].title(), code=row[1], category=row[2])
+
 
 if __name__ == '__main__':
-    print get_full_stock_list()
+    for stock in get_full_stock_list():
+        print stock
