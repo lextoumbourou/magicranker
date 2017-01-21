@@ -132,7 +132,6 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'djangobower',
     'compressor',
-    'south',
     'django_pandas',
     'raven.contrib.django.raven_compat',
     'magicranker.rank',

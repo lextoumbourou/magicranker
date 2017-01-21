@@ -1,5 +1,4 @@
 from datetime import datetime, timedelta
-import logging
 
 from django.core.management.base import BaseCommand
 
@@ -8,6 +7,7 @@ from magicranker.stock.models import Detail
 
 
 class Command(BaseCommand):
+
     help = 'Scrape ASX.com.au and get updated list of stocks'
 
     def _get_full_stock_list(self):

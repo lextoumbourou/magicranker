@@ -6,9 +6,9 @@ class Detail(models.Model):
 
     """Store core information about listed companies."""
 
-    code = models.CharField(max_length=5, unique=True)
+    code = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=100, null=True, blank=True)
-    desc = models.TextField(null=True, blank=True)
+    category = models.CharField(max_length=100, null=True, blank=True)
     first_listed = models.DateField(null=True)
     last_listed = models.DateField(null=True)
     is_listed = models.BooleanField()
