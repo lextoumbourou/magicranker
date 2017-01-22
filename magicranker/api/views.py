@@ -37,10 +37,10 @@ def rank(request):
     else:
         rank_results = json.dumps([])
 
-    return HttpResponse(rank_results, mimetype='application/json')
+    return HttpResponse(rank_results, content_type='application/json')
 
 
 def get_all_controls(request):
     path = os.path.dirname(__file__)
     data = json.load(open(os.path.join(path, 'json/rank_controls.json')))
-    return HttpResponse(json.dumps(data), mimetype='application/json')
+    return HttpResponse(json.dumps(data), content_type='application/json')
