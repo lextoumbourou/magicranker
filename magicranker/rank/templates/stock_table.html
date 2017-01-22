@@ -1,5 +1,4 @@
 {% load humanize %}
-{% load percentage %}
 {% load static %}
 
 {% verbatim %}
@@ -30,7 +29,7 @@
                  <td>{{ stock.roe | percentage }}</td>
                  <td>{{ stock.pe }}</td>
                  <td>{{ stock.market_cap | millions }}</td>
-                 <td>{{ stock.total_debt_ratio | percentage }}</td>
+                 <td>{{ stock.total_debt_ratio | percentage}}</td>
           </tr>
           </div>
           </tbody>
