@@ -2,6 +2,8 @@ from datetime import datetime
 
 from django.core.management.base import BaseCommand
 
+import concurrent.futures
+
 from magicranker.backend.scrapers import yahoo_finance
 from magicranker.stock.models import Detail, PriceHistory, PerShare, BalSheet
 
@@ -80,13 +82,31 @@ class Command(BaseCommand):
 
         return True
 
+    def _do_stock(self, stock):
+        self.stdout.write(
+            'Collecting data for {0}'.format(stock))
+        date = datetime.today().date()
+        if self._update_latest_price(stock, date):
+            self._update_key_stats(stock, date)
+            self.scrape_count += 1
+
     def handle(self, *args, **kwargs):
         stocks = Detail.objects.filter(is_listed=True)
-        scrape_count = 0
-        for stock in stocks:
-            self.stdout.write(
-                'Collecting data for {0}'.format(stock))
-            date = datetime.today().date()
-            if self._update_latest_price(stock, date):
-                self._update_key_stats(stock, date)
-                scrape_count += 1
+
+        self.scrape_count = 0
+
+        # Based on example here:
+        # https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+            future_to_stock = {
+                executor.submit(self._do_stock, stock): stock
+                for stock in stocks}
+
+            for future in concurrent.futures.as_completed(future_to_stock):
+                stock = future_to_stock[future]
+                try:
+                    future.result()
+                except Exception as exc:
+                    print('%r generated an exception: %s' % (stock, exc))
+                else:
+                    print('%r successfully scraped' % (stock))
