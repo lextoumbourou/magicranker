@@ -1,11 +1,17 @@
 from datetime import datetime
+import logging
 
 from django.core.management.base import BaseCommand
+from django.conf import settings
 
 import concurrent.futures
 
 from magicranker.backend.scrapers import yahoo_finance
 from magicranker.stock.models import Detail, PriceHistory, PerShare, BalSheet
+
+logging.config.dictConfig(settings.LOGGING)
+
+logger = logging.getLogger(__name__)
 
 
 def get_total_debt_ratio(stock, date):
@@ -25,12 +31,14 @@ class Command(BaseCommand):
 
     def _update_latest_price(self, stock, date):
         """Get latest price and update DB."""
+        logger.info('{0}: Fetching price data'.format(stock))
+
         price_data = yahoo_finance.get_current_price(stock)
 
         if not price_data:
             return False
 
-        self.stdout.write('Updating: {0}\n'.format(price_data))
+        logger.info('{0}: Got price data: {1}'.format(stock, price_data))
 
         try:
             price_history = (
@@ -46,6 +54,9 @@ class Command(BaseCommand):
                 code=stock, date=date, close=price_data.close,
                 volume=price_data.volume)
         price_history.save()
+
+        logger.info('{0}: Saved price data'.format(stock))
+
         return True
 
     def _update_key_stats(self, stock, date):
@@ -53,10 +64,10 @@ class Command(BaseCommand):
         try:
             stats_data = yahoo_finance.get_key_stats(stock)
         except yahoo_finance.StockNotFound:
-            self.stdout.write(u'Stock not found: {0}'.format(stock))
+            logger.info('{0}: Stock not found'.format(stock))
             return
 
-        self.stdout.write('Updating: {0}\n'.format(stats_data))
+        logger.info('{0}: Got stats data: {1}'.format(stock, stats_data))
 
         try:
             per_share = PerShare.objects.get(
@@ -78,13 +89,12 @@ class Command(BaseCommand):
         per_share.total_debt_ratio = get_total_debt_ratio(stock, date)
         per_share.save()
 
-        self.stdout.write('Updated successfully: {0}\n'.format(stats_data))
+        logger.info('{0}: Stats updated succesfully.'.format(
+            stock, stats_data))
 
         return True
 
     def _do_stock(self, stock):
-        self.stdout.write(
-            'Collecting data for {0}'.format(stock))
         date = datetime.today().date()
         if self._update_latest_price(stock, date):
             self._update_key_stats(stock, date)
@@ -107,6 +117,7 @@ class Command(BaseCommand):
                 try:
                     future.result()
                 except Exception as exc:
-                    print('%r generated an exception: %s' % (stock, exc))
+                    logger.error(
+                        '{0}: Exception occured: {1}'.format(stock, exc))
                 else:
-                    print('%r successfully scraped' % (stock))
+                    logger.info('{0}: Successfully updated'.format(stock))
