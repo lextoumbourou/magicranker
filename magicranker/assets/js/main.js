@@ -37,7 +37,7 @@ rankerApp.config(['$httpProvider', function($httpProvider) {
 ]);
 
 rankerApp.factory('RankMethods', ['$http', function($http) {
-    var apiUrl = '/api/get_all_controls'
+    var apiUrl = '/api/get_all_controls/'
     var myData;
     return {
         getMethods: $http.get(apiUrl)
@@ -49,9 +49,9 @@ rankerApp.controller('RankChoicesCtrl', function RankChoicesCtrl($scope, $http, 
     $scope.loading = false;
     $scope.limit = 50;
 
-    RankMethods.getMethods.success(function(data) {
-        $scope.rankMethods = data.rank_methods;
-        $scope.filterMethods = data.filter_methods;
+    RankMethods.getMethods.then(function(response) {
+        $scope.rankMethods = response.data.rank_methods;
+        $scope.filterMethods = response.data.filter_methods;
     });
 
     $scope.selectMethod = function(method) {
@@ -85,8 +85,8 @@ rankerApp.controller('RankChoicesCtrl', function RankChoicesCtrl($scope, $http, 
             'filter_methods': $scope.filterMethods,
             'limit': $scope.limit
         }
-        $http.post(url, data).success(function(data) {
-            $scope.stocks = data;
+        $http.post(url, data).then(function(response) {
+            $scope.stocks = response.data;
             $scope.loading = false;
         });
     }

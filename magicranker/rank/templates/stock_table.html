@@ -26,10 +26,10 @@
                  <td>{{ $index + 1 }}</td>
                  <td><a href='http://au.finance.yahoo.com/q?s={{ stock.code__code }}.AX'>{{ stock.code__code }}</a></td>
                  <td><a href='http://au.finance.yahoo.com/q?s={{ stock.code__name }}.AX'>{{ stock.code__name }}</a></td>
-                 <td>{{ widthratio stock.roe 1 100 }}</td>
+                 <td>{{ stock.roe | percentage }}</td>
                  <td>{{ stock.pe }}</td>
                  <td>{{ stock.market_cap | millions }}</td>
-                 <td>{{ widthratio stock.total_debt_ratio 1 100}}</td>
+                 <td>{{ stock.total_debt_ratio | percentage}}</td>
           </tr>
           </div>
           </tbody>

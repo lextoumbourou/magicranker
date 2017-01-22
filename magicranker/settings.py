@@ -129,7 +129,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.humanize',
     'djangobower',
-
     'compressor',
     'django_pandas',
     'raven.contrib.django.raven_compat',
@@ -170,7 +169,7 @@ BOWER_INSTALLED_APPS = (
     'jquery#1.10',
     'bootstrap',
     'less',
-    'angular#1.2.0-rc.3',
+    'angular#>=1.4.0',
     'angular-bootstrap',
 )
 
