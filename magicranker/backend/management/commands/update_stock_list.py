@@ -1,9 +1,16 @@
 from datetime import datetime, timedelta
+import logging
 
 from django.core.management.base import BaseCommand
+from django.conf import settings
 
 from magicranker.backend.scrapers import asx
 from magicranker.stock.models import Detail
+
+
+logging.config.dictConfig(settings.LOGGING)
+
+logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -38,7 +45,7 @@ class Command(BaseCommand):
             stock.last_listed = today
             stock.save()
 
-            self.stdout.write('Updated {0}.\n'.format(stock))
+            logger.info('{0}: Updated'.format(stock))
 
         return new_count, update_count
 
