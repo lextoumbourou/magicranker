@@ -1,3 +1,4 @@
+attrs==16.3.0
 BeautifulSoup==3.2.1
 Django==1.10.5
 PyYAML==3.11
