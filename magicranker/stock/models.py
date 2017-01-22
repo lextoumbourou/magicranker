@@ -114,8 +114,8 @@ class PriceHistory(models.Model):
 
     code = models.ForeignKey(Detail)
     date = models.DateField()
-    close = models.DecimalField(max_digits=5, decimal_places=2)
-    volume = models.BigIntegerField()
+    close = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    volume = models.BigIntegerField(null=True)
 
     def __unicode__(self):
         return '{0} {1}'.format(self.code, unicode(self.date))
