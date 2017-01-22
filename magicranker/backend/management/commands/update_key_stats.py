@@ -1,5 +1,3 @@
-import pprint
-
 from datetime import datetime
 
 from django.core.management.base import BaseCommand
@@ -27,55 +25,60 @@ class Command(BaseCommand):
         """Get latest price and update DB."""
         price_data = yahoo_finance.get_current_price(stock)
 
-        if price_data:
-            self.stdout.write(
-                'Attempting to update {0}.\n'.format(
-                    pprint.pprint(price_data)))
-            try:
-                price_history = (
-                    PriceHistory.objects.get(code=stock, date=date))
-            except PriceHistory.DoesNotExist:
-                price_history = None
-
-            if price_history:
-                price_history.close = price_data.close
-                price_history.volume = price_data.volume
-            else:
-                price_history = PriceHistory(
-                    code=stock, date=date, close=price_data.close,
-                    volume=price_data.volume)
-            price_history.save()
-
-            return True
-        else:
+        if not price_data:
             return False
+
+        self.stdout.write('Updating: {0}\n'.format(price_data))
+
+        try:
+            price_history = (
+                PriceHistory.objects.get(code=stock, date=date))
+        except PriceHistory.DoesNotExist:
+            price_history = None
+
+        if price_history:
+            price_history.close = price_data.close
+            price_history.volume = price_data.volume
+        else:
+            price_history = PriceHistory(
+                code=stock, date=date, close=price_data.close,
+                volume=price_data.volume)
+        price_history.save()
+        return True
 
     def _update_key_stats(self, stock, date):
         """Get key statistics (relies on date collected above)."""
-        stats_data = yahoo_finance.get_key_stats(stock)
+        try:
+            stats_data = yahoo_finance.get_key_stats(stock)
+        except yahoo_finance.StockNotFound:
+            self.stdout.write(u'Stock not found: {0}'.format(stock))
+            return
 
-        if stats_data:
-            try:
-                per_share = PerShare.objects.get(
-                    code=stock, date=date, year=date.year)
-            except PerShare.DoesNotExist:
-                per_share = None
+        self.stdout.write('Updating: {0}\n'.format(stats_data))
 
-            if not per_share:
-                per_share = PerShare(
-                    code=stock, date=date)
+        try:
+            per_share = PerShare.objects.get(
+                code=stock, date=date, year=date.year)
+        except PerShare.DoesNotExist:
+            per_share = None
 
-            per_share.earnings = stats_data.eps
-            per_share.roe = stats_data.roe
-            per_share.roa = stats_data.roa
-            per_share.book_value = stats_data.bvps
-            per_share.pe = stats_data.pe
-            per_share.market_cap = stats_data.market_cap
-            per_share.year = date.year
-            per_share.total_debt_ratio = get_total_debt_ratio(stock, date)
-            per_share.save()
+        if not per_share:
+            per_share = PerShare(
+                code=stock, date=date)
 
-            self.stdout.write('Update: {0}\n'.format(stats_data))
+        per_share.earnings = stats_data.eps
+        per_share.roe = stats_data.roe
+        per_share.roa = stats_data.roa
+        per_share.book_value = stats_data.bvps
+        per_share.pe = stats_data.pe
+        per_share.market_cap = stats_data.market_cap
+        per_share.year = date.year
+        per_share.total_debt_ratio = get_total_debt_ratio(stock, date)
+        per_share.save()
+
+        self.stdout.write('Updated successfully: {0}\n'.format(stats_data))
+
+        return True
 
     def handle(self, *args, **kwargs):
         stocks = Detail.objects.filter(is_listed=True)

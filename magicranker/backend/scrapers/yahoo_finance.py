@@ -4,6 +4,13 @@ import attr
 import requests
 
 
+class StockNotFound(Exception):
+
+    """Raise when stock not found."""
+
+    pass
+
+
 @attr.attrs
 class PriceData(object):
 
@@ -39,7 +46,19 @@ def get_key_stats(stock, req=None):
         'modules=summaryDetail,defaultKeyStatistics,financialData,'
         'calendarEvents&corsDomain=finance.yahoo.com').format(stock)
     resp = req.get(url)
-    data = resp.json()
+    if resp.status_code == 404:
+        raise StockNotFound(stock)
+
+    try:
+        data = resp.json()
+    except ValueError:
+        raise StockNotFound(stock)
+
+    if (
+        data['quoteSummary'].get('error') and
+        data['quoteSummary']['error']['code'] == 'Not Found'
+    ):
+        raise StockNotFound(stock)
 
     financial_data = data['quoteSummary']['result'][0]['financialData']
 
@@ -54,6 +73,8 @@ def get_key_stats(stock, req=None):
     summary_detail = data['quoteSummary']['result'][0]['summaryDetail']
 
     pe = summary_detail['trailingPE'].get('raw')
+    pe = pe if isinstance(pe, float) else None
+
     market_cap = summary_detail['marketCap'].get('raw')
 
     return KeyStatsData(
