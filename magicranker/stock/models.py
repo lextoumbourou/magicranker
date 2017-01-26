@@ -6,9 +6,9 @@ class Detail(models.Model):
 
     """Store core information about listed companies."""
 
-    code = models.CharField(max_length=5, unique=True)
+    code = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=100, null=True, blank=True)
-    desc = models.TextField(null=True, blank=True)
+    category = models.CharField(max_length=100, null=True, blank=True)
     first_listed = models.DateField(null=True)
     last_listed = models.DateField(null=True)
     is_listed = models.BooleanField()
@@ -114,8 +114,8 @@ class PriceHistory(models.Model):
 
     code = models.ForeignKey(Detail)
     date = models.DateField()
-    close = models.DecimalField(max_digits=5, decimal_places=2)
-    volume = models.BigIntegerField()
+    close = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    volume = models.BigIntegerField(null=True)
 
     def __unicode__(self):
         return '{0} {1}'.format(self.code, unicode(self.date))

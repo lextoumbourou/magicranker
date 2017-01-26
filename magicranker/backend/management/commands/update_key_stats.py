@@ -1,9 +1,17 @@
 from datetime import datetime
+import logging
 
 from django.core.management.base import BaseCommand
+from django.conf import settings
 
-from magicranker.backend.scrapers import YahooFinance
+import concurrent.futures
+
+from magicranker.backend.scrapers import yahoo_finance
 from magicranker.stock.models import Detail, PriceHistory, PerShare, BalSheet
+
+logging.config.dictConfig(settings.LOGGING)
+
+logger = logging.getLogger(__name__)
 
 
 def get_total_debt_ratio(stock, date):
@@ -18,75 +26,98 @@ def get_total_debt_ratio(stock, date):
 
 
 class Command(BaseCommand):
+
     help = 'Get Profile Details from YahooFinance'
 
-    def _update_latest_price(self, stock, date, yf):
-        # get today's price information
-        price_data = yf.get_current_price()
-        if price_data:
-            code, date, price, volume = price_data
-            self.stdout.write(
-                'Attempting to update {0} with {1}, {2}, {3}\n'.format(
-                    stock.code, str(date), price, volume))
-            try:
-                price_history = (
-                    PriceHistory.objects.get(code=stock, date=date))
-            except PriceHistory.DoesNotExist:
-                price_history = None
+    def _update_latest_price(self, stock, date):
+        """Get latest price and update DB."""
+        logger.info('{0}: Fetching price data'.format(stock))
 
-            if price_history:
-                price_history.close = price
-                price_history.volume = volume
-            else:
-                price_history = PriceHistory(
-                    code=stock, date=date, close=price, volume=volume)
-            price_history.save()
+        price_data = yahoo_finance.get_current_price(stock)
 
-            return True
-        else:
+        if not price_data:
             return False
 
-    def _update_key_stats(self, stock, date, yf):
+        logger.info('{0}: Got price data: {1}'.format(stock, price_data))
+
+        try:
+            price_history = (
+                PriceHistory.objects.get(code=stock, date=date))
+        except PriceHistory.DoesNotExist:
+            price_history = None
+
+        if price_history:
+            price_history.close = price_data.close
+            price_history.volume = price_data.volume
+        else:
+            price_history = PriceHistory(
+                code=stock, date=date, close=price_data.close,
+                volume=price_data.volume)
+        price_history.save()
+
+        logger.info('{0}: Saved price data'.format(stock))
+
+        return True
+
+    def _update_key_stats(self, stock, date):
         """Get key statistics (relies on date collected above)."""
-        stats_data = yf.get_key_stats()
-        if stats_data:
-            code, eps, roe, bv, pe, mc = stats_data
-            self.stdout.write((
-                'Attempting to update {0} with '
-                '{1}, {2}, {3}, {4}, {5}\n').format(
-                    code, eps, roe, bv, pe, mc))
+        try:
+            stats_data = yahoo_finance.get_key_stats(stock)
+        except yahoo_finance.StockNotFound:
+            logger.info('{0}: Stock not found'.format(stock))
+            return
 
-            try:
-                per_share = PerShare.objects.get(
-                    code=stock, date=date, year=date.year)
-            except PerShare.DoesNotExist:
-                per_share = None
+        logger.info('{0}: Got stats data: {1}'.format(stock, stats_data))
 
-            if not per_share:
-                per_share = PerShare(
-                    code=stock, date=date)
+        try:
+            per_share = PerShare.objects.get(
+                code=stock, date=date, year=date.year)
+        except PerShare.DoesNotExist:
+            per_share = None
 
-            per_share.earnings = eps
-            per_share.roe = roe
-            per_share.book_value = bv
-            per_share.pe = pe
-            per_share.market_cap = mc
-            per_share.year = date.year
-            per_share.total_debt_ratio = get_total_debt_ratio(stock, date)
-            per_share.save()
+        if not per_share:
+            per_share = PerShare(
+                code=stock, date=date)
 
-            self.stdout.write(
-                'Updating {0} with {1}, {2}, {3}, {4}, {5}\n'.format(
-                    stock.code, eps, roe, bv, pe, mc))
+        per_share.earnings = stats_data.eps
+        per_share.roe = stats_data.roe
+        per_share.roa = stats_data.roa
+        per_share.book_value = stats_data.bvps
+        per_share.pe = stats_data.pe
+        per_share.market_cap = stats_data.market_cap
+        per_share.year = date.year
+        per_share.total_debt_ratio = get_total_debt_ratio(stock, date)
+        per_share.save()
+
+        logger.info('{0}: Stats updated succesfully.'.format(
+            stock, stats_data))
+
+        return True
+
+    def _do_stock(self, stock):
+        date = datetime.today().date()
+        if self._update_latest_price(stock, date):
+            self._update_key_stats(stock, date)
+            self.scrape_count += 1
 
     def handle(self, *args, **kwargs):
         stocks = Detail.objects.filter(is_listed=True)
-        scrape_count = 0
-        for stock in stocks:
-            self.stdout.write(
-                'Collecting data for {0}'.format(stock))
-            yf = YahooFinance.YahooFinance(stock.code)
-            date = datetime.today().date()
-            if self._update_latest_price(stock, date, yf):
-                self._update_key_stats(stock, date, yf)
-                scrape_count += 1
+
+        self.scrape_count = 0
+
+        # Based on example here:
+        # https://docs.python.org/3/library/concurrent.futures.html#concurrent.futures.ThreadPoolExecutor
+        with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+            future_to_stock = {
+                executor.submit(self._do_stock, stock): stock
+                for stock in stocks}
+
+            for future in concurrent.futures.as_completed(future_to_stock):
+                stock = future_to_stock[future]
+                try:
+                    future.result()
+                except Exception as exc:
+                    logger.error(
+                        '{0}: Exception occured: {1}'.format(stock, exc))
+                else:
+                    logger.info('{0}: Successfully updated'.format(stock))

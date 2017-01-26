@@ -16,7 +16,7 @@
         {% if debug %}
         <link rel="stylesheet/less" type="text/css" media="all" href="{% static 'less/theme.less' %}" />
         <link rel="stylesheet/less" type="text/css" media="all" href="{% static 'less/bs3-stacked-tabs.less' %}" />
-        <script src="{% static 'js/less-1.5.0.min.js' %}"></script>
+        <script src="{% static 'less/dist/less.min.js' %}"></script>
         {% else %}
         {% compress css %}
         <link rel="stylesheet" type="text/less" media="all" href="{% static 'less/theme.less' %}" />
@@ -61,5 +61,5 @@
         <script>
             {% include 'ga.html' %}
         </script>
-    </body> 
-</html> 
+    </body>
+</html>

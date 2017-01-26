@@ -10,8 +10,6 @@ if is_dev:
 else:
     DEBUG = False
 
-TEMPLATE_DEBUG = DEBUG
-
 ADMINS = (
     (private.ADMIN_FULLNAME, private.ADMIN_EMAIL),
 )
@@ -92,11 +90,6 @@ STATICFILES_FINDERS = (
 SECRET_KEY = private.SECRET_KEY
 
 # List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -111,15 +104,20 @@ ROOT_URLCONF = private.ROOT_URLCONF
 
 WSGI_APPLICATION = 'magicranker.wsgi.application'
 
-TEMPLATE_DIRS = (
-    os.path.join(os.path.dirname(__file__), 'templates'),
-)
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.request',
-    'django.contrib.auth.context_processors.auth',
-    'magicranker.context_processors.google_analytics'
-)
+TEMPLATES = [{
+    'BACKEND': 'django.template.backends.django.DjangoTemplates',
+    'DIRS': [os.path.join(os.path.dirname(__file__), 'templates')],
+    'APP_DIRS': True,
+    'OPTIONS': {
+        'context_processors': [
+            'django.template.context_processors.debug',
+            'django.template.context_processors.request',
+            'django.contrib.auth.context_processors.auth',
+            'django.contrib.messages.context_processors.messages',
+        ],
+        'debug': DEBUG
+    }
+}]
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -132,7 +130,6 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'djangobower',
     'compressor',
-    'south',
     'django_pandas',
     'raven.contrib.django.raven_compat',
     'magicranker.rank',
@@ -172,7 +169,7 @@ BOWER_INSTALLED_APPS = (
     'jquery#1.10',
     'bootstrap',
     'less',
-    'angular#1.2.0-rc.3',
+    'angular#>=1.4.0',
     'angular-bootstrap',
 )
 
@@ -183,6 +180,31 @@ COMPRESS_PRECOMPILERS = (
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'lessc {infile} {outfile}'),
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # this fixes the problem
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+            },
+    },
+    'handlers': {
+        'default': {
+            'level':'INFO',
+            'formatter': 'standard',
+            'class':'logging.StreamHandler',
+
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['default'],
+            'level': 'INFO',
+            'propagate': True
+        }
+    }
+}
 
 if not is_dev:
     RAVEN_CONFIG = {'dsn': private.RAVEN_DSN}
