@@ -4,3 +4,4 @@ _private.py
 ENV
 */static/*
 node_modules/*
+.DS_Store
