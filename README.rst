@@ -5,21 +5,6 @@ MagicRanker is an open-source stock marking ranking and filtering tool based on 
 
 You can view it in action at `MagicRanker.com <http://MagicRanker.com>`_.
 
-Installation with Docker
-------------------------
-
-MagicRanker can easily be configured with Docker, as follows:
-
-```
-docker-compose build
-docker-compose up -d
-docker-compose run web python /code/manage.py migrate stock
-docker-compose run web python /code/manage.py bower install
-docker-compose run web python /code/manage.py collectstatic --noinput
-docker-compose run web python /code/manage.py compress
-```
-
-
 Dependancies
 ------------
 
@@ -105,6 +90,25 @@ Running tests
 ::
 
     > python manage.py test
+
+Installation with Docker
+------------------------
+
+**Note: still working on this section.**
+
+MagicRanker can  be configured with Docker, as follows:
+
+```
+docker-compose build
+docker-compose up -d
+docker-compose run web python /code/manage.py migrate stock
+docker-compose run web python /code/manage.py bower install
+docker-compose run web python /code/manage.py collectstatic --noinput
+docker-compose run web python /code/manage.py compress
+```
+
+
+
 
 
 To do list
