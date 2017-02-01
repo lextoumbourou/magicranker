@@ -96,20 +96,16 @@ Installation with Docker
 
 **Note: still working on this section.**
 
-MagicRanker can  be configured with Docker, as follows:
+MagicRanker can be configured with Docker, as follows:
 
-```
-docker-compose build
-docker-compose up -d
-docker-compose run web python /code/manage.py migrate stock
-docker-compose run web python /code/manage.py bower install
-docker-compose run web python /code/manage.py collectstatic --noinput
-docker-compose run web python /code/manage.py compress
-```
+::
 
-
-
-
+    docker-compose build
+    docker-compose up -d
+    docker-compose run web python /code/manage.py migrate stock
+    docker-compose run web python /code/manage.py bower install
+    docker-compose run web python /code/manage.py collectstatic --noinput
+    docker-compose run web python /code/manage.py compress
 
 To do list
 -----------
