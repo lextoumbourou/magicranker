@@ -1,4 +1,7 @@
+import json
 from datetime import datetime
+
+from bs4 import BeautifulSoup
 
 import attr
 import requests
@@ -40,37 +43,27 @@ def get_key_stats(stock, req=None):
     """Return key stats from page HTML."""
     req = req or requests
 
-    url = (
-        'https://query1.finance.yahoo.com/v10/finance/quoteSummary/{0}.AX?'
-        'formatted=true&lang=en-US&region=AU&'
-        'modules=summaryDetail,defaultKeyStatistics,financialData,'
-        'calendarEvents&corsDomain=finance.yahoo.com').format(stock)
+    url = f'https://finance.yahoo.com/quote/{stock}.AX/key-statistics?p={stock}.AX'
+
     resp = req.get(url)
     if resp.status_code == 404:
         raise StockNotFound(stock)
 
-    try:
-        data = resp.json()
-    except ValueError:
-        raise StockNotFound(stock)
+    soup = BeautifulSoup(resp.content, 'html.parser')
+    context = json.loads(
+        soup.html.body.find_all('script')[-3].string.split('root.App.main = ', 1)[-1].rsplit(';', 1)[0][:-10])['context']
 
-    if (
-        data['quoteSummary'].get('error') and
-        data['quoteSummary']['error']['code'] == 'Not Found'
-    ):
-        raise StockNotFound(stock)
-
-    financial_data = data['quoteSummary']['result'][0]['financialData']
+    financial_data = context['dispatcher']['stores']['QuoteSummaryStore']['financialData']
 
     roe = financial_data['returnOnEquity'].get('raw')
     roa = financial_data['returnOnAssets'].get('raw')
 
-    key_statistics = data['quoteSummary']['result'][0]['defaultKeyStatistics']
+    key_statistics = context['dispatcher']['stores']['QuoteSummaryStore']['defaultKeyStatistics']
 
     eps = key_statistics['trailingEps'].get('raw')
     bvps = key_statistics['bookValue'].get('raw')
 
-    summary_detail = data['quoteSummary']['result'][0]['summaryDetail']
+    summary_detail = context['dispatcher']['stores']['QuoteSummaryStore']['summaryDetail']
 
     pe = summary_detail['trailingPE'].get('raw')
     pe = pe if isinstance(pe, float) else None
@@ -122,7 +115,4 @@ def get_current_price(stock, req=None):
 
 if __name__ == '__main__':
     for stock in ['ANZ', 'CBA']:
-        current_price = get_current_price(stock)
-        print "Current price", current_price
-        if current_price:
-            print "Key stats", get_key_stats(stock)
+        print("Key stats {0}".format(get_key_stats(stock)))

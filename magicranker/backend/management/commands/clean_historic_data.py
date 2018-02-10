@@ -9,7 +9,7 @@ class Command(BaseCommand):
         for stock in stocks:
             if stock.date:
                 if stock.date.year != stock.year:
-                    print 'Updating ', stock
+                    print(f'Updating {stock}')
                     stock.year = stock.date.year
                     stock.save()
 

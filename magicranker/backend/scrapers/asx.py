@@ -1,6 +1,6 @@
 import re
 import csv
-from StringIO import StringIO
+from io import StringIO
 
 import attr
 import requests
@@ -35,4 +35,4 @@ def get_full_stock_list(req=None):
 
 if __name__ == '__main__':
     for stock in get_full_stock_list():
-        print stock
+        print(stock)

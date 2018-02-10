@@ -33,10 +33,10 @@ class Command(BaseCommand):
         """Get latest price and update DB."""
         logger.info('{0}: Fetching price data'.format(stock))
 
-        price_data = yahoo_finance.get_current_price(stock)
+        #price_data = yahoo_finance.get_current_price(stock)
 
-        if not price_data:
-            return False
+        #if not price_data:
+        #    return False
 
         logger.info('{0}: Got price data: {1}'.format(stock, price_data))
 
@@ -96,9 +96,8 @@ class Command(BaseCommand):
 
     def _do_stock(self, stock):
         date = datetime.today().date()
-        if self._update_latest_price(stock, date):
-            self._update_key_stats(stock, date)
-            self.scrape_count += 1
+        self._update_key_stats(stock, date)
+        self.scrape_count += 1
 
     def handle(self, *args, **kwargs):
         stocks = Detail.objects.filter(is_listed=True)
