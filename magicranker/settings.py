@@ -1,6 +1,6 @@
 import os.path
 
-import _private as private
+import magicranker._private as private
 
 is_dev = os.uname()[1] in private.DEV_SERVERS
 
