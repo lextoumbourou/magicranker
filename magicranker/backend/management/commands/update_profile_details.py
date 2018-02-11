@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 
-from magicranker.backend.scrapers import YahooFinance
+from magicranker.backend.scrapers.yahoo_finance import YahooFinance
 from magicranker.stock.models import Detail
 
 
