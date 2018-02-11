@@ -2,7 +2,6 @@
 
 from django.views.generic import View
 from django.shortcuts import render
-from django.template import RequestContext
 
 
 class HomeView(View):
