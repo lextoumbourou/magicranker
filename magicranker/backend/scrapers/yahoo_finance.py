@@ -1,6 +1,5 @@
 import json
 from datetime import datetime
-
 from bs4 import BeautifulSoup
 
 import attr
@@ -37,6 +36,7 @@ class KeyStatsData(object):
     bvps = attr.attrib()
     pe = attr.attrib()
     market_cap = attr.attrib()
+    shares_outstanding = attr.attrib()
 
 
 def get_key_stats(stock, req=None):
@@ -57,24 +57,25 @@ def get_key_stats(stock, req=None):
 
     financial_data = context['dispatcher']['stores']['QuoteSummaryStore']['financialData']
 
-    roe = financial_data['returnOnEquity'].get('raw')
-    roa = financial_data['returnOnAssets'].get('raw')
+    roe = (financial_data.get('returnOnEquity') or {}).get('raw')
+    roa = (financial_data.get('returnOnAssets') or {}).get('raw')
 
     key_statistics = context['dispatcher']['stores']['QuoteSummaryStore']['defaultKeyStatistics']
 
-    eps = key_statistics['trailingEps'].get('raw')
-    bvps = key_statistics['bookValue'].get('raw')
+    eps = (key_statistics.get('trailingEps') or {}).get('raw')
+    bvps = (key_statistics.get('bookValue') or {}).get('raw')
+    shares_outstanding = (key_statistics.get('sharesOutstanding') or {}).get('raw')
 
     summary_detail = context['dispatcher']['stores']['QuoteSummaryStore']['summaryDetail']
 
-    pe = summary_detail['trailingPE'].get('raw')
+    pe = (summary_detail.get('trailingPE') or {}).get('raw')
     pe = pe if isinstance(pe, float) else None
 
     market_cap = summary_detail['marketCap'].get('raw')
 
     return KeyStatsData(
-        stock=stock, eps=eps, roe=roe,
-        roa=roa, bvps=bvps, pe=pe, market_cap=market_cap)
+        stock=stock, eps=eps, roe=roe, roa=roa,
+        bvps=bvps, pe=pe, market_cap=market_cap, shares_outstanding=shares_outstanding)
 
 
 def get_current_price(stock, req=None):
