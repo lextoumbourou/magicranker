@@ -41,7 +41,7 @@ class Ranker():
         for method in self.rank_methods + self.filter_methods:
             if (
                 'average' in method and
-                method['average']['changeable'] and method['average'] > highest
+                method['average']['changeable'] and method['average']['value'] > highest
             ):
                 highest = method['average']['value']
                 # If they have requested the values to be averaged,
@@ -88,7 +88,7 @@ class Ranker():
             # Average if requested
             if (
                 'average' in method and
-                method['average']['changeable'] and method['average'] > 1
+                method['average']['changeable'] and method['average']['value'] > 1
             ):
                 this_years_data[method['name']] = (
                     data[method['name']]

@@ -63,18 +63,17 @@ class Command(BaseCommand):
         error_count = 0
         for stock in stocks:
             time.sleep(1)
-            print stock.code
+            print(stock.code)
             data = etrade.get_data(stock)
-            print data
+            print(data)
             if data:
                 try:
                     self.add_to_db(stock, data)
                     scrape_count += 1
                 except Exception as e:
-                    print "Can't add to database: " + str(e)
+                    print(f"Can't add to database: {e}")
                     error_count += 1
-        title = 'Report: update historical stats ({0})'.format(
-                datetime.now())
+        title = 'Report: update historical stats ({0})'.format(datetime.now())
         message = '{0} companies updated\n'.format(scrape_count)
         message += '{0} companies failed to update\n'.format(error_count)
         send_mail(

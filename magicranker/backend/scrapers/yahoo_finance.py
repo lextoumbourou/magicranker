@@ -1,4 +1,6 @@
+import json
 from datetime import datetime
+from bs4 import BeautifulSoup
 
 import attr
 import requests
@@ -34,76 +36,73 @@ class KeyStatsData(object):
     bvps = attr.attrib()
     pe = attr.attrib()
     market_cap = attr.attrib()
+    shares_outstanding = attr.attrib()
 
 
 def get_key_stats(stock, req=None):
     """Return key stats from page HTML."""
     req = req or requests
 
-    url = (
-        'https://query1.finance.yahoo.com/v10/finance/quoteSummary/{0}.AX?'
-        'formatted=true&lang=en-US&region=AU&'
-        'modules=summaryDetail,defaultKeyStatistics,financialData,'
-        'calendarEvents&corsDomain=finance.yahoo.com').format(stock)
+    url = 'https://finance.yahoo.com/quote/{stock}.AX/key-statistics?p={stock}.AX'.format(
+        stock=stock)
+
     resp = req.get(url)
     if resp.status_code == 404:
         raise StockNotFound(stock)
 
-    try:
-        data = resp.json()
-    except ValueError:
-        raise StockNotFound(stock)
+    soup = BeautifulSoup(resp.content, 'html.parser')
+    context = json.loads(
+        soup.html.body.find_all('script')[-3].string.split(
+            'root.App.main = ', 1)[-1].rsplit(';', 1)[0][:-10])['context']
 
-    if (
-        data['quoteSummary'].get('error') and
-        data['quoteSummary']['error']['code'] == 'Not Found'
-    ):
-        raise StockNotFound(stock)
+    financial_data = context['dispatcher']['stores']['QuoteSummaryStore']['financialData']
 
-    financial_data = data['quoteSummary']['result'][0]['financialData']
+    roe = (financial_data.get('returnOnEquity') or {}).get('raw')
+    roa = (financial_data.get('returnOnAssets') or {}).get('raw')
 
-    roe = financial_data['returnOnEquity'].get('raw')
-    roa = financial_data['returnOnAssets'].get('raw')
+    key_statistics = context['dispatcher']['stores']['QuoteSummaryStore']['defaultKeyStatistics']
 
-    key_statistics = data['quoteSummary']['result'][0]['defaultKeyStatistics']
+    eps = (key_statistics.get('trailingEps') or {}).get('raw')
+    bvps = (key_statistics.get('bookValue') or {}).get('raw')
+    shares_outstanding = (key_statistics.get('sharesOutstanding') or {}).get('raw')
 
-    eps = key_statistics['trailingEps'].get('raw')
-    bvps = key_statistics['bookValue'].get('raw')
+    summary_detail = context['dispatcher']['stores']['QuoteSummaryStore']['summaryDetail']
 
-    summary_detail = data['quoteSummary']['result'][0]['summaryDetail']
-
-    pe = summary_detail['trailingPE'].get('raw')
+    pe = (summary_detail.get('trailingPE') or {}).get('raw')
     pe = pe if isinstance(pe, float) else None
 
     market_cap = summary_detail['marketCap'].get('raw')
 
     return KeyStatsData(
-        stock=stock, eps=eps, roe=roe,
-        roa=roa, bvps=bvps, pe=pe, market_cap=market_cap)
+        stock=stock, eps=eps, roe=roe, roa=roa,
+        bvps=bvps, pe=pe, market_cap=market_cap, shares_outstanding=shares_outstanding)
 
 
 def get_current_price(stock, req=None):
     req = req or requests
-    url = (
-        'http://download.finance.yahoo.com/d'
-        '/quotes.csv?s={0}.AX&f=sl1d1t1c1ohgv&e=.csv'.format(stock))
-    r = req.get(url)
-    page = r.text
 
-    values = None
-    if page:
-        values = page.split(',')
+    url = 'https://finance.yahoo.com/quote/{0}.AX?p={0}.AX'.format(stock)
+    resp = req.get(url)
 
-    if not values:
-        return False
+    if resp.status_code == 404:
+        raise StockNotFound(stock)
+
+    soup = BeautifulSoup(resp.content, 'html.parser')
+    context = json.loads(
+        soup.html.body.find_all('script')[-3].string.split(
+            'root.App.main = ', 1)[-1].rsplit(';', 1)[0][:-10])['context']
+
+    quote_data = (
+        context['dispatcher']['stores'][
+            'StreamDataStore']['quoteData']['{0}.AX'.format(stock)])
 
     # Collect useful data from the CSV
-    date_string = values[2]
-    price = values[6]
-    volume = values[8]
+    market_time = quote_data['regularMarketTime']['raw']
+    price = quote_data['regularMarketPreviousClose']['raw']
+    volume = quote_data['regularMarketVolume']['raw']
 
     try:
-        date = datetime.strptime(date_string, '"%m/%d/%Y"').date()
+        date = datetime.fromtimestamp(market_time).date()
     except ValueError:
         return False
 
@@ -123,6 +122,6 @@ def get_current_price(stock, req=None):
 if __name__ == '__main__':
     for stock in ['ANZ', 'CBA']:
         current_price = get_current_price(stock)
-        print "Current price", current_price
+        print("Current price: {current_price}".format(current_price=current_price))
         if current_price:
-            print "Key stats", get_key_stats(stock)
+            print("Key stats {0}".format(get_key_stats(stock)))

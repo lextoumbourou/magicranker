@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-import models
+from magicranker.stock import models
 
 admin.site.register(models.Detail)
 admin.site.register(models.PerShare)

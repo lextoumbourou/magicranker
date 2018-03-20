@@ -118,4 +118,4 @@ class PriceHistory(models.Model):
     volume = models.BigIntegerField(null=True)
 
     def __unicode__(self):
-        return '{0} {1}'.format(self.code, unicode(self.date))
+        return '{0} {1}'.format(self.code, self.date)
