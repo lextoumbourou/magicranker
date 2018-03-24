@@ -167,7 +167,7 @@ GA_TRACKING_ID = private.GA_TRACKING_ID
 
 BOWER_INSTALLED_APPS = (
     'jquery#1.10',
-    'bootstrap',
+    'bootstrap==3.3.7',
     'less',
     'angular#>=1.4.0',
     'angular-bootstrap',
